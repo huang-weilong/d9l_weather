@@ -1,3 +1,4 @@
+import 'package:d9l_weather/dio_client.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -63,7 +64,9 @@ class _HomePageState extends State<HomePage> {
             right: 0.0,
             child: IconButton(
               icon: Icon(Icons.add, color: Colors.white),
-              onPressed: () {},
+              onPressed: () {
+                DioClient().getThreeDaysForecast();
+              },
             ),
           ),
         ],
