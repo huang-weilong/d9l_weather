@@ -50,7 +50,7 @@ class DioClient {
 
       threeDaysForecast.basic = Basic.fromJson(threeDaysForecast.mBasic);
       threeDaysForecast.update = Update.fromJson(threeDaysForecast.mUpdate);
-      for (var d in threeDaysForecast.mDailyForecast) {
+      for (var d in threeDaysForecast.mDailyForecasts) {
         threeDaysForecast.dailyForecasts.add(DailyForecast.fromJson(d));
       }
 
@@ -65,6 +65,13 @@ class DioClient {
     String url = rootUrl + '/lifestyle?location=beijing&key=$key';
     try {
       Response response = await Dio().get(url, options: options);
+      TodayLifeStyle todayLifeStyle = TodayLifeStyle.fromJson(response.data['HeWeather6'].first);
+      todayLifeStyle.basic = Basic.fromJson(todayLifeStyle.mBasic);
+      todayLifeStyle.update = Update.fromJson(todayLifeStyle.mUpdate);
+      for (var l in todayLifeStyle.mLifeStyles) {
+        todayLifeStyle.lifeStyles.add(LifeStyle.fromJson(l));
+      }
+      print('===========> ${todayLifeStyle.lifeStyles.first.txt}');
     } catch (e) {
       print('getLifeStyle error= $e');
     }

@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
             child: IconButton(
               icon: Icon(Icons.add, color: Colors.white),
               onPressed: () {
-                DioClient().getThreeDaysForecast();
+                DioClient().getRealTimeWeather();
               },
             ),
           ),

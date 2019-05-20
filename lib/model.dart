@@ -163,6 +163,23 @@ class DailyForecast {
         windSpd = json['wind_spd'];
 }
 
+class LifeStyle {
+  String type; // 生活指数类型
+  String brf; // 生活指数简介
+  String txt; // 生活指数详细描述
+
+  LifeStyle({
+    this.type,
+    this.brf,
+    this.txt,
+  });
+
+  LifeStyle.fromJson(Map<String, dynamic> json)
+      : type = json['type'],
+        brf = json['brf'],
+        txt = json['txt'];
+}
+
 //////////////////////////////////////////////////////////////////
 
 // 实况天气
@@ -197,7 +214,7 @@ class RealTimeWeather {
 class ThreeDaysForecast {
   Map mBasic;
   Map mUpdate;
-  List mDailyForecast;
+  List mDailyForecasts;
 
   String status;
   Basic basic;
@@ -207,7 +224,7 @@ class ThreeDaysForecast {
   ThreeDaysForecast({
     this.mBasic,
     this.mUpdate,
-    this.mDailyForecast,
+    this.mDailyForecasts,
     this.status,
     this.basic,
     this.update,
@@ -218,5 +235,32 @@ class ThreeDaysForecast {
       : mBasic = json['basic'],
         mUpdate = json['update'],
         status = json['status'],
-        mDailyForecast = json['daily_forecast'];
+        mDailyForecasts = json['daily_forecast'];
+}
+
+// 生活指数
+class TodayLifeStyle {
+  Map mBasic;
+  Map mUpdate;
+  List mLifeStyles;
+
+  String status;
+  Basic basic;
+  Update update;
+  List<LifeStyle> lifeStyles = [];
+
+  TodayLifeStyle({
+    this.mBasic,
+    this.mUpdate,
+    this.mLifeStyles,
+    this.status,
+    this.basic,
+    this.update,
+    this.lifeStyles,
+  });
+  TodayLifeStyle.fromJson(Map<String, dynamic> json)
+      : mBasic = json['basic'],
+        mUpdate = json['update'],
+        status = json['status'],
+        mLifeStyles = json['lifestyle'];
 }
