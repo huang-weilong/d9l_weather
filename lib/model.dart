@@ -1,13 +1,13 @@
 // 基础信息
 class Basic {
-  String cid; // 地区／城市ID
-  String location; // 地区／城市名称
-  String parentCity; // 该地区／城市的上级城市
-  String adminArea; // 该地区／城市所属行政区域
-  String cnty; // 该地区／城市所属国家名称
-  String lat; // 地区／城市纬度
-  String lon; // 地区／城市经度
-  String tz; // 该地区／城市所在时区
+  String cid; // 地区/城市ID
+  String location; // 地区/城市名称
+  String parentCity; // 该地区/城市的上级城市
+  String adminArea; // 该地区/城市所属行政区域
+  String cnty; // 该地区/城市所属国家名称
+  String lat; // 地区/城市纬度
+  String lon; // 地区/城市经度
+  String tz; // 该地区/城市所在时区
 
   Basic({
     this.cid,

@@ -23,20 +23,25 @@ class DioClient {
   static final Options options = Options(connectTimeout: 10000);
 
   // 实况天气  Real-time weather
-  Future<void> getRealTimeWeather() async {
-    String url = rootUrl + '/now?location=beijing&key=$key';
+  Future<RealTimeWeather> getRealTimeWeather(String cid) async {
+    String url = rootUrl + '/now';
 //    String url = rootUrl + '/now?location=beijing&lang=en&key=$key'; // 支持多语言
 
     try {
-      Response response = await Dio().get(url, options: options);
+      Response response = await Dio().get(url, options: options, queryParameters: {
+        'location': cid,
+        'key': key,
+      });
       RealTimeWeather realTimeWeather;
       realTimeWeather = RealTimeWeather.fromJson(response.data['HeWeather6'].first);
 
       realTimeWeather.basic = Basic.fromJson(realTimeWeather.mBasic);
       realTimeWeather.update = Update.fromJson(realTimeWeather.mUpdate);
       realTimeWeather.now = Now.fromJson(realTimeWeather.mNow);
+      return realTimeWeather;
     } catch (e) {
       print('getRealTimeWeather error= $e');
+      return null;
     }
   }
 
@@ -74,6 +79,31 @@ class DioClient {
       print('===========> ${todayLifeStyle.lifeStyles.first.txt}');
     } catch (e) {
       print('getLifeStyle error= $e');
+    }
+  }
+
+  // 城市搜索 city
+  Future<List<Basic>> searchCity(String keyword) async {
+    String url = 'https://search.heweather.net/find';
+    try {
+      Response response = await Dio().get(url, options: options, queryParameters: {
+        'location': keyword,
+        'key': key,
+        'mode': '',
+        'number': 20,
+      });
+
+      List<Basic> cityList = [];
+      if (response.data['HeWeather6'] != null) {
+        for (var c in response.data['HeWeather6'].first['basic']) {
+          cityList.add(Basic.fromJson(c));
+        }
+      }
+      print('==============> ${response.data}');
+      return cityList;
+    } catch (e) {
+      print('searchCity error= $e');
+      return null;
     }
   }
 }

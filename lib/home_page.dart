@@ -1,5 +1,8 @@
 import 'package:d9l_weather/dio_client.dart';
+import 'package:d9l_weather/model.dart';
+import 'package:d9l_weather/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,15 +10,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  RealTimeWeather realTimeWeather;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double statusBar = MediaQuery.of(context).padding.top;
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: statusBar),
+          Container(
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -40,17 +45,33 @@ class _HomePageState extends State<HomePage> {
               physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 80.0),
+                  padding: EdgeInsets.only(top: 90.0),
                   child: Column(
                     children: <Widget>[
-                      Text('晴', style: TextStyle(fontSize: 30.0, color: Colors.white, fontWeight: FontWeight.bold)),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text('惠城区', style: TextStyle(fontSize: 16.0, color: Colors.white)),
+                      Text(
+                        '${realTimeWeather?.now?.condTxt ?? '未知'}',
+                        style: TextStyle(fontSize: 34.0, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 40.0),
-                        child: Text('30℃', style: TextStyle(fontSize: 80.0, color: Colors.white, fontWeight: FontWeight.bold)),
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          realTimeWeather?.basic?.location ?? '未知',
+                          style: TextStyle(fontSize: 16.0, color: Colors.white),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              '${realTimeWeather?.now?.tmp ?? '0'}',
+                              style: TextStyle(fontSize: 80.0, color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                            Text('℃', style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
                       ),
                       SizedBox(height: 330.0)
                     ],
@@ -65,7 +86,17 @@ class _HomePageState extends State<HomePage> {
             child: IconButton(
               icon: Icon(Icons.add, color: Colors.white),
               onPressed: () {
-                DioClient().getRealTimeWeather();
+                Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
+                  if (result != null) {
+                    DioClient().getRealTimeWeather(result).then((v) {
+                      if (v != null && this.mounted) {
+                        setState(() {
+                          realTimeWeather = v;
+                        });
+                      }
+                    });
+                  }
+                });
               },
             ),
           ),
