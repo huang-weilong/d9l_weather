@@ -1,21 +1,37 @@
 import 'package:d9l_weather/dio_client.dart';
 import 'package:d9l_weather/model.dart';
 import 'package:d9l_weather/search_page.dart';
+import 'package:d9l_weather/sp_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
+  HomePage({this.realTimeWeather, this.dailyForecastList});
+
+  final RealTimeWeather realTimeWeather;
+  final List<DailyForecast> dailyForecastList;
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  RealTimeWeather realTimeWeather;
   String cid;
-
+  RealTimeWeather realTimeWeather;
   List<DailyForecast> dailyForecastList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.realTimeWeather != null) {
+      realTimeWeather = widget.realTimeWeather;
+    }
+    if (widget.dailyForecastList != null) {
+      dailyForecastList = widget.dailyForecastList;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
                   if (result != null) {
                     cid = result;
+                    SpClient.sp.setString('cid', cid);
                     _updateWeather();
                   }
                 });
