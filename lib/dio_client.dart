@@ -2,9 +2,6 @@ import 'package:d9l_weather/model.dart';
 import 'package:dio/dio.dart';
 
 class DioClient {
-//  static final DioClient _instance = DioClient();
-//  static DioClient get instance => _instance;
-
   factory DioClient() => _getInstance();
   static DioClient get instance => _getInstance();
   static DioClient _instance; // 单例对象
@@ -46,10 +43,13 @@ class DioClient {
   }
 
   // 3天预报  3 days forecast
-  Future<void> getThreeDaysForecast() async {
-    String url = rootUrl + '/forecast?location=beijing&key=$key';
+  Future<ThreeDaysForecast> getThreeDaysForecast(String cid) async {
+    String url = rootUrl + '/forecast';
     try {
-      Response response = await Dio().get(url, options: options);
+      Response response = await Dio().get(url, options: options, queryParameters: {
+        'location': cid,
+        'key': key,
+      });
       ThreeDaysForecast threeDaysForecast;
       threeDaysForecast = ThreeDaysForecast.fromJson(response.data['HeWeather6'].first);
 
@@ -58,10 +58,10 @@ class DioClient {
       for (var d in threeDaysForecast.mDailyForecasts) {
         threeDaysForecast.dailyForecasts.add(DailyForecast.fromJson(d));
       }
-
-      print('##########> ${threeDaysForecast.dailyForecasts.first.condTxtD}');
+      return threeDaysForecast;
     } catch (e) {
       print('getThreeToSevenForecast error= $e');
+      return null;
     }
   }
 

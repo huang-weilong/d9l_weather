@@ -106,8 +106,8 @@ class DailyForecast {
   String pres;
   String sr;
   String ss;
-  String tmpMax;
-  String tmpMin;
+  String tmpMax; // 最高温度
+  String tmpMin; // 最低温度
   String uvIndex;
   String vis;
   String windDeg;

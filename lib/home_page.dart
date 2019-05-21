@@ -3,6 +3,7 @@ import 'package:d9l_weather/model.dart';
 import 'package:d9l_weather/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,6 +12,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   RealTimeWeather realTimeWeather;
+  String cid;
+
+  List<DailyForecast> dailyForecastList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +31,9 @@ class _HomePageState extends State<HomePage> {
                 Image.asset('assets/images/bg.png', fit: BoxFit.fill, width: width),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    _fiveDayWeather('周一', '28℃'),
-                    _fiveDayWeather('周二', '27℃'),
-                    _fiveDayWeather('周三', '28℃'),
-                    _fiveDayWeather('周四', '29℃'),
-                    _fiveDayWeather('周五', '31℃'),
-                  ],
+                  children: dailyForecastList.map((item) {
+                    return _threeDayWeather(item);
+                  }).toList(),
                 ),
                 Text('d9lweather', style: TextStyle(color: Color(0xffe2e2e2))),
               ],
@@ -49,13 +49,13 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        '${realTimeWeather?.now?.condTxt ?? '未知'}',
+                        '${realTimeWeather?.now?.condTxt ?? 'unknown'}',
                         style: TextStyle(fontSize: 34.0, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
-                          realTimeWeather?.basic?.location ?? '未知',
+                          realTimeWeather?.basic?.location ?? 'unknown',
                           style: TextStyle(fontSize: 16.0, color: Colors.white),
                         ),
                       ),
@@ -88,13 +88,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
                   if (result != null) {
-                    DioClient().getRealTimeWeather(result).then((v) {
-                      if (v != null && this.mounted) {
-                        setState(() {
-                          realTimeWeather = v;
-                        });
-                      }
-                    });
+                    cid = result;
+                    _updateWeather();
                   }
                 });
               },
@@ -105,7 +100,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fiveDayWeather(String date, String temp) {
+  Widget _threeDayWeather(DailyForecast dailyForecast) {
+    String date = DateFormat('EE', 'zh_CN').format(
+      DateTime.parse(dailyForecast.date),
+    );
     return Column(
       children: <Widget>[
         Text(date, style: TextStyle(color: Color(0xff8a8a8a))),
@@ -113,15 +111,31 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.symmetric(vertical: 10.0),
           child: Image.asset('assets/images/sunny.png'),
         ),
-        Text(temp, style: TextStyle(color: Color(0xff8a8a8a))),
+        Text(dailyForecast.tmpMin + '℃~' + dailyForecast.tmpMax + '℃', style: TextStyle(color: Color(0xff8a8a8a))),
       ],
     );
   }
 
   // refresh
   Future<void> _pullDownRefresh() async {
-    await Future.delayed(Duration(seconds: 3), () {
-      print('refresh success');
+    await _updateWeather();
+  }
+
+  Future<void> _updateWeather() async {
+    await DioClient().getRealTimeWeather(cid).then((v) {
+      if (v != null && this.mounted) {
+        setState(() {
+          realTimeWeather = v;
+        });
+      }
+    });
+
+    await DioClient().getThreeDaysForecast(cid).then((v) {
+      if (v != null && this.mounted) {
+        setState(() {
+          dailyForecastList = v.dailyForecasts;
+        });
+      }
     });
   }
 }
