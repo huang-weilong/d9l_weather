@@ -4,6 +4,7 @@ import 'package:d9l_weather/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -118,15 +119,23 @@ class _HomePageState extends State<HomePage> {
 
   // refresh
   Future<void> _pullDownRefresh() async {
-    await _updateWeather();
+    bool result = await _updateWeather();
+    if (result) {
+      Fluttertoast.showToast(msg: '更新成功！');
+    } else {
+      Fluttertoast.showToast(msg: '更新失败！');
+    }
   }
 
-  Future<void> _updateWeather() async {
+  Future<bool> _updateWeather() async {
+    bool flag = true;
     await DioClient().getRealTimeWeather(cid).then((v) {
       if (v != null && this.mounted) {
         setState(() {
           realTimeWeather = v;
         });
+      } else {
+        flag = false;
       }
     });
 
@@ -135,7 +144,10 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           dailyForecastList = v.dailyForecasts;
         });
+      } else {
+        flag = false;
       }
     });
+    return flag;
   }
 }
