@@ -31,6 +31,9 @@ class DioClient {
       });
       RealTimeWeather realTimeWeather;
       realTimeWeather = RealTimeWeather.fromJson(response.data['HeWeather6'].first);
+      if (realTimeWeather.status.contains('permission')) {
+        return realTimeWeather;
+      }
 
       realTimeWeather.basic = Basic.fromJson(realTimeWeather.mBasic);
       realTimeWeather.update = Update.fromJson(realTimeWeather.mUpdate);

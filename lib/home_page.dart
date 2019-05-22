@@ -106,7 +106,6 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
                   if (result != null) {
                     cid = result;
-                    SpClient.sp.setString('cid', cid);
                     _updateWeather();
                   }
                 });
@@ -148,6 +147,12 @@ class _HomePageState extends State<HomePage> {
     bool flag = true;
     await DioClient().getRealTimeWeather(cid).then((v) {
       if (v != null && this.mounted) {
+        if (v.status.contains('permission')) {
+          Fluttertoast.showToast(msg: '没有权限');
+          cid = SpClient.sp.getString('cid');
+          return;
+        }
+        SpClient.sp.setString('cid', cid);
         setState(() {
           realTimeWeather = v;
         });
