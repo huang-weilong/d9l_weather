@@ -25,6 +25,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    if (SpClient.sp.getString('cid') != null) {
+      cid = SpClient.sp.getString('cid');
+    }
     if (widget.realTimeWeather != null) {
       realTimeWeather = widget.realTimeWeather;
     }
