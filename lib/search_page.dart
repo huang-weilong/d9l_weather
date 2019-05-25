@@ -14,17 +14,22 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
         child: Container(
           color: Colors.blue.withOpacity(0.6),
           padding: EdgeInsets.only(top: statusBarHeight, left: 10.0, right: 10.0),
           child: Row(
             children: <Widget>[
-              Icon(Icons.search),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Image.asset('assets/images/search.png', width: 20.0),
+              ),
               Flexible(
                 child: TextField(
                   scrollPadding: EdgeInsets.all(0.0),
                   decoration: InputDecoration(
+                    border: InputBorder.none,
                     contentPadding: EdgeInsets.all(0.0),
                     isDense: true,
                     hintText: '城市名称中文/拼音',
@@ -41,10 +46,11 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               IconButton(
-                  icon: Text('取消'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  })
+                icon: Text('取消'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
             ],
           ),
         ),
