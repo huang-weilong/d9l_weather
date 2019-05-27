@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Image.network('https://cdn.heweather.com/cond_icon/${realTimeWeather.now.condCode}.png', width: 46.0),
+                          Image.network('https://cdn.heweather.com/cond_icon/${realTimeWeather.now.condCode}.png', width: 40.0),
                           Text(
                             '${realTimeWeather?.now?.condTxt ?? 'unknown'}',
                             style: TextStyle(fontSize: 26.0, color: Colors.white),
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
         Text(date, style: TextStyle(color: Color(0xff8a8a8a))),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 4.0),
-          child: Image.network('https://cdn.heweather.com/cond_icon/${dailyForecast.condCodeD}.png', width: 46.0),
+          child: Image.network('https://cdn.heweather.com/cond_icon/${dailyForecast.condCodeD}.png', width: 40.0),
         ),
         Text(dailyForecast.condTxtD, style: TextStyle(color: Color(0xff8a8a8a))),
         Padding(
