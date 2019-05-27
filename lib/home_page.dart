@@ -38,24 +38,38 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
           Container(
-            color: Colors.white,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [Colors.blue, Colors.blue.withOpacity(0.4)],
+              ),
+            ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Image.asset('assets/images/bg.png', fit: BoxFit.fill, width: width),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: dailyForecastList.map((item) {
-                    return _threeDayWeather(item);
-                  }).toList(),
+                Expanded(child: Container()),
+                Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: dailyForecastList.map((item) {
+                      return _threeDayWeather(item);
+                    }).toList(),
+                  ),
                 ),
-                Text('d9lweather', style: TextStyle(color: Color(0xffe2e2e2))),
+                Container(
+                  color: Colors.white,
+                  alignment: Alignment.center,
+                  child: Text('d9lweather', style: TextStyle(color: Color(0xffe2e2e2))),
+                ),
               ],
             ),
           ),
@@ -128,10 +142,14 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         Text(date, style: TextStyle(color: Color(0xff8a8a8a))),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          child: Image.asset('assets/images/sunny.png'),
+          padding: EdgeInsets.symmetric(vertical: 4.0),
+          child: Image.network('https://cdn.heweather.com/cond_icon/${dailyForecast.condCodeD}.png', width: 46.0),
         ),
-        Text(dailyForecast.tmpMin + '℃~' + dailyForecast.tmpMax + '℃', style: TextStyle(color: Color(0xff8a8a8a))),
+        Text(dailyForecast.condTxtD, style: TextStyle(color: Color(0xff8a8a8a))),
+        Padding(
+          padding: EdgeInsets.only(top: 4.0),
+          child: Text(dailyForecast.tmpMin + '℃~' + dailyForecast.tmpMax + '℃', style: TextStyle(color: Color(0xff8a8a8a))),
+        ),
       ],
     );
   }
