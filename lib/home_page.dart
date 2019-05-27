@@ -51,10 +51,63 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 100.0),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    realTimeWeather?.basic?.location ?? 'unknown',
+                    style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${realTimeWeather?.now?.tmp ?? '0'}°',
+                        style: TextStyle(fontSize: 80.0, color: Colors.white),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Image.network('https://cdn.heweather.com/cond_icon/${realTimeWeather.now.condCode}.png', width: 46.0),
+                          Text(
+                            '${realTimeWeather?.now?.condTxt ?? 'unknown'}',
+                            style: TextStyle(fontSize: 26.0, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 Expanded(child: Container()),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _someMessage(
+                        icon: 'assets/images/wind_direction.png',
+                        title: '风向',
+                        data: realTimeWeather.now.windDir,
+                      ),
+                      _someMessage(
+                        icon: 'assets/images/humidity.png',
+                        title: '湿度',
+                        data: realTimeWeather.now.hum + '%',
+                      ),
+                      _someMessage(
+                        icon: 'assets/images/air_pressure.png',
+                        title: '气压',
+                        data: realTimeWeather.now.pres + 'hpa',
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 24.0),
@@ -66,6 +119,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Container(
+                  padding: EdgeInsets.only(bottom: 6.0),
                   color: Colors.white,
                   alignment: Alignment.center,
                   child: Text('d9lweather', style: TextStyle(color: Color(0xffe2e2e2))),
@@ -77,55 +131,52 @@ class _HomePageState extends State<HomePage> {
             onRefresh: _pullDownRefresh,
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 90.0),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        '${realTimeWeather?.now?.condTxt ?? 'unknown'}',
-                        style: TextStyle(fontSize: 34.0, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          realTimeWeather?.basic?.location ?? 'unknown',
-                          style: TextStyle(fontSize: 16.0, color: Colors.white),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              '${realTimeWeather?.now?.tmp ?? '0'}',
-                              style: TextStyle(fontSize: 80.0, color: Colors.white, fontWeight: FontWeight.bold),
-                            ),
-                            Text('℃', style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 330.0)
-                    ],
-                  ),
-                ),
-              ),
+              child: Center(child: SizedBox(height: 500.0)),
             ),
           ),
           Positioned(
             top: 27.0,
             right: 0.0,
             child: IconButton(
-              icon: Icon(Icons.add, color: Colors.white),
+              icon: Image.asset('assets/images/setting.png'),
               onPressed: () {
-                Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
-                  if (result != null) {
-                    cid = result;
-                    _updateWeather();
-                  }
-                });
+                showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            title: Text('切换城市'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
+                                if (result != null) {
+                                  cid = result;
+                                  _updateWeather();
+                                }
+                              });
+                            },
+                          ),
+                          Divider(height: 0.0),
+                          ListTile(
+                            title: Text('选择语言'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Fluttertoast.showToast(msg: '暂时不能选择语言');
+                            },
+                          ),
+                          Divider(height: 0.0),
+                          ListTile(
+                            title: Text('关于我'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Fluttertoast.showToast(msg: '暂无');
+                            },
+                          ),
+                        ],
+                      );
+                    });
               },
             ),
           ),
@@ -149,6 +200,20 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: EdgeInsets.only(top: 4.0),
           child: Text(dailyForecast.tmpMin + '℃~' + dailyForecast.tmpMax + '℃', style: TextStyle(color: Color(0xff8a8a8a))),
+        ),
+      ],
+    );
+  }
+
+  Widget _someMessage({String icon, String title, String data}) {
+    return Row(
+      children: <Widget>[
+        Image.asset(icon, width: 30.0, fit: BoxFit.fill),
+        Column(
+          children: <Widget>[
+            Text(title, style: TextStyle(color: Colors.white)),
+            Text(data, style: TextStyle(color: Colors.white)),
+          ],
         ),
       ],
     );
