@@ -22,6 +22,17 @@ class _HomePageState extends State<HomePage> {
   RealTimeWeather realTimeWeather;
   List<DailyForecast> dailyForecastList = [];
 
+  bool isNoNetwork = false;
+  RealTimeWeather _noNetworkWeather = RealTimeWeather(
+    basic: Basic(location: 'unknown'),
+    now: Now(tmp: 'N/A', condCode: '999', condTxt: 'unknown', windDir: '--', hum: '--', pres: '--'),
+  );
+  List<DailyForecast> _noNetworkForecastList = [
+    DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-27 13:23:10'),
+    DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-28 13:23:10'),
+    DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-29 13:23:10'),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -30,9 +41,15 @@ class _HomePageState extends State<HomePage> {
     }
     if (widget.realTimeWeather != null) {
       realTimeWeather = widget.realTimeWeather;
+    } else {
+      isNoNetwork = true;
+      realTimeWeather = _noNetworkWeather;
     }
     if (widget.dailyForecastList != null) {
       dailyForecastList = widget.dailyForecastList;
+    } else {
+      isNoNetwork = true;
+      dailyForecastList = _noNetworkForecastList;
     }
   }
 
@@ -57,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
-                    realTimeWeather?.basic?.location ?? 'unknown',
+                    realTimeWeather.basic.location,
                     style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -65,26 +82,34 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(top: 30.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '${realTimeWeather?.now?.tmp ?? '0'}°',
+                        '${realTimeWeather.now.tmp}°',
                         style: TextStyle(fontSize: 80.0, color: Colors.white),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Image.network('https://cdn.heweather.com/cond_icon/${realTimeWeather.now.condCode}.png', width: 40.0),
+                          Image.asset('assets/images/weather/${realTimeWeather.now.condCode}.png', color: Colors.white),
+                          SizedBox(height: 10.0),
                           Text(
-                            '${realTimeWeather?.now?.condTxt ?? 'unknown'}',
-                            style: TextStyle(fontSize: 26.0, color: Colors.white),
+                            '${realTimeWeather.now.condTxt}',
+                            style: TextStyle(fontSize: 20.0, color: Colors.white),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                Expanded(child: Container()),
+                Expanded(
+                  child: isNoNetwork
+                      ? Align(
+                          alignment: Alignment.center,
+                          child: Text('请检查你的网络状态', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                        )
+                      : Container(),
+                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 20.0),
                   child: Row(
@@ -141,42 +166,44 @@ class _HomePageState extends State<HomePage> {
               icon: Image.asset('assets/images/setting.png'),
               onPressed: () {
                 showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            title: Text('切换城市'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
-                                if (result != null) {
-                                  cid = result;
-                                  _updateWeather();
-                                }
-                              });
-                            },
-                          ),
-                          Divider(height: 0.0),
-                          ListTile(
-                            title: Text('选择语言'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Fluttertoast.showToast(msg: '暂时不能选择语言');
-                            },
-                          ),
-                          Divider(height: 0.0),
-                          ListTile(
-                            title: Text('关于我'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Fluttertoast.showToast(msg: '暂无');
-                            },
-                          ),
-                        ],
-                      );
-                    });
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          title: Text('切换城市'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
+                              if (result != null) {
+                                cid = result;
+                                isNoNetwork = false;
+                                _updateWeather();
+                              }
+                            });
+                          },
+                        ),
+                        Divider(height: 0.0),
+                        ListTile(
+                          title: Text('选择语言'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Fluttertoast.showToast(msg: '暂时不能选择语言');
+                          },
+                        ),
+                        Divider(height: 0.0),
+                        ListTile(
+                          title: Text('关于我'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Fluttertoast.showToast(msg: '暂无');
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -194,7 +221,7 @@ class _HomePageState extends State<HomePage> {
         Text(date, style: TextStyle(color: Color(0xff8a8a8a))),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 4.0),
-          child: Image.network('https://cdn.heweather.com/cond_icon/${dailyForecast.condCodeD}.png', width: 40.0),
+          child: Image.asset('assets/images/weather/${dailyForecast.condCodeD}.png', color: Colors.blue),
         ),
         Text(dailyForecast.condTxtD, style: TextStyle(color: Color(0xff8a8a8a))),
         Padding(
@@ -223,6 +250,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _pullDownRefresh() async {
     bool result = await _updateWeather();
     if (result) {
+      isNoNetwork = false;
       Fluttertoast.showToast(msg: '更新成功！');
     } else {
       Fluttertoast.showToast(msg: '更新失败！');
