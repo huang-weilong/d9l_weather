@@ -25,10 +25,11 @@ void main() {
 
   Future.wait([initializeDateFormatting("zh_CN", null), SpClient.getInstance()]).then((_) async {
     DioClient();
-    if (SpClient.sp.getString('cid') != null) {
-      String cid = SpClient.sp.getString('cid');
-      await _updateWeather(cid);
+    if (SpClient.sp.getString('cid') == null) {
+      SpClient.sp.setString('cid', 'CN101280101'); // 第一次安装APP默认显示广州天气
     }
+    String cid = SpClient.sp.getString('cid');
+    await _updateWeather(cid);
     runApp(MyApp(realTimeWeather: realTimeWeather, dailyForecastList: dailyForecastList));
   });
 }

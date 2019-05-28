@@ -24,8 +24,8 @@ class _HomePageState extends State<HomePage> {
 
   bool isNoNetwork = false;
   RealTimeWeather _noNetworkWeather = RealTimeWeather(
-    basic: Basic(location: 'unknown'),
-    now: Now(tmp: 'N/A', condCode: '999', condTxt: 'unknown', windDir: '--', hum: '--', pres: '--'),
+    basic: Basic(location: '未知'),
+    now: Now(tmp: 'N/A', condTxt: '', windDir: '--', hum: '--', pres: '--'),
   );
   List<DailyForecast> _noNetworkForecastList = [
     DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-27 13:23:10'),
@@ -91,7 +91,9 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Image.asset('assets/images/weather/${realTimeWeather.now.condCode}.png', color: Colors.white),
+                          realTimeWeather.now.condCode == null
+                              ? Container()
+                              : Image.asset('assets/images/weather/${realTimeWeather.now.condCode}.png', color: Colors.white),
                           SizedBox(height: 10.0),
                           Text(
                             '${realTimeWeather.now.condTxt}',
