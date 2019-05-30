@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'about_page.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({this.realTimeWeather, this.dailyForecastList});
 
@@ -196,10 +198,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Divider(height: 0.0),
                         ListTile(
-                          title: Text('关于我'),
+                          title: Text('关于'),
                           onTap: () {
                             Navigator.pop(context);
-                            Fluttertoast.showToast(msg: '暂无');
+                            Navigator.push(context, CupertinoPageRoute(builder: (_) => AboutPage()));
                           },
                         ),
                       ],
