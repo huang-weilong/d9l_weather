@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Image.asset('assets/images/search.png', width: 20.0),
+                child: Image.asset('assets/images/search.png', width: 20.0, color: Colors.white),
               ),
               Flexible(
                 child: TextField(
