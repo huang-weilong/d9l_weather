@@ -1,29 +1,21 @@
-import 'package:d9l_weather/dio_client.dart';
 import 'package:d9l_weather/model.dart';
 import 'package:d9l_weather/search_page.dart';
-import 'package:d9l_weather/sp_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:flutter_mobx/flutter_mobx.dart';
+
 import 'about_page.dart';
+import 'store/home_page_store.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({this.realTimeWeather, this.dailyForecastList});
-
-  final RealTimeWeather realTimeWeather;
-  final List<DailyForecast> dailyForecastList;
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  String cid;
-  RealTimeWeather realTimeWeather;
-  List<DailyForecast> dailyForecastList = [];
-
   bool isNoNetwork = false;
   RealTimeWeather _noNetworkWeather = RealTimeWeather(
     basic: Basic(location: '未知'),
@@ -34,26 +26,6 @@ class _HomePageState extends State<HomePage> {
     DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-28 13:23:10'),
     DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-29 13:23:10'),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    if (SpClient.sp.getString('cid') != null) {
-      cid = SpClient.sp.getString('cid');
-    }
-    if (widget.realTimeWeather != null) {
-      realTimeWeather = widget.realTimeWeather;
-    } else {
-      isNoNetwork = true;
-      realTimeWeather = _noNetworkWeather;
-    }
-    if (widget.dailyForecastList != null) {
-      dailyForecastList = widget.dailyForecastList;
-    } else {
-      isNoNetwork = true;
-      dailyForecastList = _noNetworkForecastList;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +47,11 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 100.0),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.0),
-                  child: Text(
-                    realTimeWeather.basic.location,
-                    style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold),
+                  child: Observer(
+                    builder: (_) => Text(
+                          homePageStore.realTimeWeather.basic.location,
+                          style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                   ),
                 ),
                 Padding(
@@ -86,22 +60,27 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        '${realTimeWeather.now.tmp}°',
-                        style: TextStyle(fontSize: 80.0, color: Colors.white),
+                      Observer(
+                        builder: (_) => Text(
+                              '${homePageStore.realTimeWeather.now.tmp}°',
+                              style: TextStyle(fontSize: 80.0, color: Colors.white),
+                            ),
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          realTimeWeather.now.condCode == null
-                              ? Container()
-                              : Image.asset('assets/images/weather/${realTimeWeather.now.condCode}.png', color: Colors.white),
-                          SizedBox(height: 10.0),
-                          Text(
-                            '${realTimeWeather.now.condTxt}',
-                            style: TextStyle(fontSize: 20.0, color: Colors.white),
-                          ),
-                        ],
+                      Observer(
+                        builder: (_) => Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                homePageStore.realTimeWeather.now.condCode == null
+                                    ? Container()
+                                    : Image.asset('assets/images/weather/${homePageStore.realTimeWeather.now.condCode}.png',
+                                        color: Colors.white),
+                                SizedBox(height: 10.0),
+                                Text(
+                                  '${homePageStore.realTimeWeather.now.condTxt}',
+                                  style: TextStyle(fontSize: 20.0, color: Colors.white),
+                                ),
+                              ],
+                            ),
                       ),
                     ],
                   ),
@@ -116,35 +95,39 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      _someMessage(
-                        icon: 'assets/images/wind_direction.png',
-                        title: '风向',
-                        data: realTimeWeather.now.windDir,
-                      ),
-                      _someMessage(
-                        icon: 'assets/images/humidity.png',
-                        title: '湿度',
-                        data: realTimeWeather.now.hum + '%',
-                      ),
-                      _someMessage(
-                        icon: 'assets/images/air_pressure.png',
-                        title: '气压',
-                        data: realTimeWeather.now.pres + 'hpa',
-                      ),
-                    ],
+                  child: Observer(
+                    builder: (_) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            _someMessage(
+                              icon: 'assets/images/wind_direction.png',
+                              title: '风向',
+                              data: homePageStore.realTimeWeather.now.windDir,
+                            ),
+                            _someMessage(
+                              icon: 'assets/images/humidity.png',
+                              title: '湿度',
+                              data: homePageStore.realTimeWeather.now.hum + '%',
+                            ),
+                            _someMessage(
+                              icon: 'assets/images/air_pressure.png',
+                              title: '气压',
+                              data: homePageStore.realTimeWeather.now.pres + 'hpa',
+                            ),
+                          ],
+                        ),
                   ),
                 ),
                 Container(
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 24.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: dailyForecastList.map((item) {
-                      return _threeDayWeather(item);
-                    }).toList(),
+                  child: Observer(
+                    builder: (_) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: homePageStore.dailyForecastList.map((item) {
+                            return _threeDayWeather(item);
+                          }).toList(),
+                        ),
                   ),
                 ),
                 Container(
@@ -181,9 +164,9 @@ class _HomePageState extends State<HomePage> {
                             Navigator.pop(context);
                             Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
                               if (result != null) {
-                                cid = result;
                                 isNoNetwork = false;
-                                _updateWeather();
+                                homePageStore.setCid(result);
+                                homePageStore.updateWeather();
                               }
                             });
                           },
@@ -252,42 +235,15 @@ class _HomePageState extends State<HomePage> {
 
   // refresh
   Future<void> _pullDownRefresh() async {
-    bool result = await _updateWeather();
-    if (result) {
-      isNoNetwork = false;
-      Fluttertoast.showToast(msg: '更新成功！');
-    } else {
-      Fluttertoast.showToast(msg: '更新失败！');
-    }
-  }
-
-  Future<bool> _updateWeather() async {
-    bool flag = true;
-    await DioClient().getRealTimeWeather(cid).then((v) {
-      if (v != null && this.mounted) {
-        if (v.status.contains('permission')) {
-          Fluttertoast.showToast(msg: '没有权限');
-          cid = SpClient.sp.getString('cid');
-          return;
-        }
-        SpClient.sp.setString('cid', cid);
-        setState(() {
-          realTimeWeather = v;
-        });
+    bool result = await homePageStore.updateWeather();
+    setState(() {
+      if (result) {
+        isNoNetwork = false;
+        Fluttertoast.showToast(msg: '更新成功！');
       } else {
-        flag = false;
+        isNoNetwork = true;
+        Fluttertoast.showToast(msg: '更新失败！');
       }
     });
-
-    await DioClient().getThreeDaysForecast(cid).then((v) {
-      if (v != null && this.mounted) {
-        setState(() {
-          dailyForecastList = v.dailyForecasts;
-        });
-      } else {
-        flag = false;
-      }
-    });
-    return flag;
   }
 }
