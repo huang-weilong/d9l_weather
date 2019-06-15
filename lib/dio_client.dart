@@ -29,15 +29,15 @@ class DioClient {
         'location': cid,
         'key': key,
       });
+      print('#############>> ${response.data}');
       RealTimeWeather realTimeWeather;
       realTimeWeather = RealTimeWeather.fromJson(response.data['HeWeather6'].first);
-      if (realTimeWeather.status.contains('permission')) {
-        return realTimeWeather;
+      if (realTimeWeather.status == 'ok') {
+        realTimeWeather.basic = Basic.fromJson(realTimeWeather.mBasic);
+        realTimeWeather.update = Update.fromJson(realTimeWeather.mUpdate);
+        realTimeWeather.now = Now.fromJson(realTimeWeather.mNow);
       }
 
-      realTimeWeather.basic = Basic.fromJson(realTimeWeather.mBasic);
-      realTimeWeather.update = Update.fromJson(realTimeWeather.mUpdate);
-      realTimeWeather.now = Now.fromJson(realTimeWeather.mNow);
       return realTimeWeather;
     } catch (e) {
       print('getRealTimeWeather error= $e');

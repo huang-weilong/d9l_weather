@@ -13,7 +13,7 @@ void main() {
       SpClient.sp.setString('cid', 'CN101280101'); // 第一次安装APP默认显示广州天气
     }
     homePageStore.cid = SpClient.sp.getString('cid');
-    await homePageStore.updateWeather();
+    await homePageStore.updateWeather(homePageStore.cid);
     runApp(MyApp());
   });
 }

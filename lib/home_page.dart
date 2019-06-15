@@ -16,17 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isNoNetwork = false;
-  RealTimeWeather _noNetworkWeather = RealTimeWeather(
-    basic: Basic(location: '未知'),
-    now: Now(tmp: 'N/A', condTxt: '', windDir: '--', hum: '--', pres: '--'),
-  );
-  List<DailyForecast> _noNetworkForecastList = [
-    DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-27 13:23:10'),
-    DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-28 13:23:10'),
-    DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-29 13:23:10'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,13 +74,15 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: isNoNetwork
-                      ? Align(
-                          alignment: Alignment.center,
-                          child: Text('请检查你的网络状态', style: TextStyle(color: Colors.white, fontSize: 20.0)),
-                        )
-                      : Container(),
+                Observer(
+                  builder: (_) => Expanded(
+                        child: homePageStore.isNoNetwork
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: Text('请检查你的网络状态', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                              )
+                            : Container(),
+                      ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 20.0),
@@ -164,9 +155,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.pop(context);
                             Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
                               if (result != null) {
-                                isNoNetwork = false;
-                                homePageStore.setCid(result);
-                                homePageStore.updateWeather();
+                                homePageStore.updateWeather(result);
                               }
                             });
                           },
@@ -235,15 +224,6 @@ class _HomePageState extends State<HomePage> {
 
   // refresh
   Future<void> _pullDownRefresh() async {
-    bool result = await homePageStore.updateWeather();
-    setState(() {
-      if (result) {
-        isNoNetwork = false;
-        Fluttertoast.showToast(msg: '更新成功！');
-      } else {
-        isNoNetwork = true;
-        Fluttertoast.showToast(msg: '更新失败！');
-      }
-    });
+    await homePageStore.updateWeather(homePageStore.cid);
   }
 }

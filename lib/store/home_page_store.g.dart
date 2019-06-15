@@ -9,6 +9,22 @@ part of 'home_page_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars
 
 mixin _$HomePageStore on HomePageBase, Store {
+  final _$isNoNetworkAtom = Atom(name: 'HomePageBase.isNoNetwork');
+
+  @override
+  bool get isNoNetwork {
+    _$isNoNetworkAtom.reportObserved();
+    return super.isNoNetwork;
+  }
+
+  @override
+  set isNoNetwork(bool value) {
+    _$isNoNetworkAtom.context
+        .checkIfStateModificationsAreAllowed(_$isNoNetworkAtom);
+    super.isNoNetwork = value;
+    _$isNoNetworkAtom.reportChanged();
+  }
+
   final _$cidAtom = Atom(name: 'HomePageBase.cid');
 
   @override
@@ -59,17 +75,27 @@ mixin _$HomePageStore on HomePageBase, Store {
   final _$updateWeatherAsyncAction = AsyncAction('updateWeather');
 
   @override
-  Future<bool> updateWeather() {
-    return _$updateWeatherAsyncAction.run(() => super.updateWeather());
+  Future<void> updateWeather(String cid) {
+    return _$updateWeatherAsyncAction.run(() => super.updateWeather(cid));
   }
 
   final _$HomePageBaseActionController = ActionController(name: 'HomePageBase');
 
   @override
-  void setCid(String value) {
+  void setNetworkStatus(bool value) {
     final _$actionInfo = _$HomePageBaseActionController.startAction();
     try {
-      return super.setCid(value);
+      return super.setNetworkStatus(value);
+    } finally {
+      _$HomePageBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _setCid(String value) {
+    final _$actionInfo = _$HomePageBaseActionController.startAction();
+    try {
+      return super._setCid(value);
     } finally {
       _$HomePageBaseActionController.endAction(_$actionInfo);
     }

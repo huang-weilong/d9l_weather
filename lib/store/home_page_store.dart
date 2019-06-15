@@ -16,6 +16,9 @@ final HomePageStore homePageStore = HomePageStore();
 
 abstract class HomePageBase implements Store {
   @observable
+  bool isNoNetwork = false;
+
+  @observable
   String cid;
 
   @observable
@@ -25,7 +28,12 @@ abstract class HomePageBase implements Store {
   List<DailyForecast> dailyForecastList = [];
 
   @action
-  void setCid(String value) {
+  void setNetworkStatus(bool value) {
+    this.isNoNetwork = value;
+  }
+
+  @action
+  void _setCid(String value) {
     this.cid = value;
   }
 
@@ -40,29 +48,47 @@ abstract class HomePageBase implements Store {
   }
 
   @action
-  Future<bool> updateWeather() async {
-    bool flag = true;
-    await DioClient().getRealTimeWeather(cid).then((v) {
-      if (v != null) {
-        if (v.status.contains('permission')) {
-          Fluttertoast.showToast(msg: '没有权限');
-          cid = SpClient.sp.getString('cid');
-          return;
-        }
-        SpClient.sp.setString('cid', cid);
-        setRealTimeWeather(v);
-      } else {
-        flag = false;
+  Future<void> updateWeather(String cid) async {
+    RealTimeWeather v = await DioClient().getRealTimeWeather(cid);
+
+    if (v != null) {
+      if (v.status.contains('permission')) {
+        Fluttertoast.showToast(msg: '没有权限');
+        return;
+      } else if (v.status.contains('unknown')) {
+        Fluttertoast.showToast(msg: '无法查询该地址天气');
+        return;
       }
-    });
+      SpClient.sp.setString('cid', cid);
+      _setCid(cid);
+      setRealTimeWeather(v);
+    }
 
     await DioClient().getThreeDaysForecast(cid).then((v) {
       if (v != null) {
         setDailyForecastList(v.dailyForecasts);
-      } else {
-        flag = false;
       }
     });
-    return flag;
+
+    if (this.realTimeWeather == null) {
+      _setEmptyData();
+    } else {
+      Fluttertoast.showToast(msg: '更新成功');
+    }
+  }
+
+  @action
+  void _setEmptyData() {
+    RealTimeWeather _noNetworkWeather = RealTimeWeather(
+      basic: Basic(location: '未知'),
+      now: Now(tmp: 'N/A', condTxt: '', windDir: '--', hum: '--', pres: '--'),
+    );
+    List<DailyForecast> _noNetworkForecastList = [
+      DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-27 13:23:10'),
+      DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-28 13:23:10'),
+      DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-29 13:23:10'),
+    ];
+    setRealTimeWeather(_noNetworkWeather);
+    setDailyForecastList(_noNetworkForecastList);
   }
 }
