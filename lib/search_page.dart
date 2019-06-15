@@ -1,6 +1,7 @@
-import 'package:d9l_weather/dio_client.dart';
-import 'package:d9l_weather/model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+
+import 'store/search_page_store.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -8,7 +9,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<Basic> cityList = [];
+  @override
+  void dispose() {
+    searchPageStore.setCityList([]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +40,7 @@ class _SearchPageState extends State<SearchPage> {
                     hintText: '城市名称中文/拼音',
                   ),
                   onChanged: (v) {
-                    DioClient().searchCity(v).then((result) {
-                      if (result != null && this.mounted) {
-                        setState(() {
-                          cityList = result;
-                        });
-                      }
-                    });
+                    searchPageStore.getCityList(v);
                   },
                 ),
               ),
@@ -56,22 +55,24 @@ class _SearchPageState extends State<SearchPage> {
         ),
         preferredSize: Size.fromHeight(56.0),
       ),
-      body: ListView(
-        children: cityList.map((item) {
-          return InkWell(
-            onTap: () {
-              Navigator.pop(context, item.cid);
-            },
-            child: Container(
-              padding: EdgeInsets.all(14.0),
-              decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xffd3d3d3), width: 0.5))),
-              child: Text(
-                '${item.adminArea} - ${item.parentCity} - ${item.location}',
-                style: TextStyle(fontSize: 16.0),
-              ),
+      body: Observer(
+        builder: (_) => ListView(
+              children: searchPageStore.cityList.map((item) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.pop(context, item.cid);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(14.0),
+                    decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xffd3d3d3), width: 0.5))),
+                    child: Text(
+                      '${item.adminArea} - ${item.parentCity} - ${item.location}',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
-          );
-        }).toList(),
       ),
     );
   }
