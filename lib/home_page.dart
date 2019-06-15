@@ -10,12 +10,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'about_page.dart';
 import 'store/home_page_store.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
