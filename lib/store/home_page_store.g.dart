@@ -120,4 +120,14 @@ mixin _$HomePageStore on HomePageBase, Store {
       _$HomePageBaseActionController.endAction(_$actionInfo);
     }
   }
+
+  @override
+  void _setEmptyData(String title) {
+    final _$actionInfo = _$HomePageBaseActionController.startAction();
+    try {
+      return super._setEmptyData(title);
+    } finally {
+      _$HomePageBaseActionController.endAction(_$actionInfo);
+    }
+  }
 }

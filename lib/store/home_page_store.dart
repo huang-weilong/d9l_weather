@@ -58,6 +58,9 @@ abstract class HomePageBase implements Store {
       } else if (v.status.contains('unknown')) {
         Fluttertoast.showToast(msg: '无法查询该地址天气');
         return;
+      } else if (v.status.contains('no more')) {
+        _setEmptyData('查询次数超上限');
+        return;
       }
       SpClient.sp.setString('cid', cid);
       _setCid(cid);
@@ -71,16 +74,16 @@ abstract class HomePageBase implements Store {
     });
 
     if (this.realTimeWeather == null) {
-      _setEmptyData();
+      _setEmptyData('未知');
     } else {
       Fluttertoast.showToast(msg: '更新成功');
     }
   }
 
   @action
-  void _setEmptyData() {
+  void _setEmptyData(String title) {
     RealTimeWeather _noNetworkWeather = RealTimeWeather(
-      basic: Basic(location: '未知'),
+      basic: Basic(location: title),
       now: Now(tmp: 'N/A', condTxt: '', windDir: '--', hum: '--', pres: '--'),
     );
     List<DailyForecast> _noNetworkForecastList = [
