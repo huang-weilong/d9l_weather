@@ -59,13 +59,13 @@ mixin _$HomePageStore on HomePageBase, Store {
   final _$dailyForecastListAtom = Atom(name: 'HomePageBase.dailyForecastList');
 
   @override
-  List<DailyForecast> get dailyForecastList {
+  ObservableList<DailyForecast> get dailyForecastList {
     _$dailyForecastListAtom.reportObserved();
     return super.dailyForecastList;
   }
 
   @override
-  set dailyForecastList(List<DailyForecast> value) {
+  set dailyForecastList(ObservableList<DailyForecast> value) {
     _$dailyForecastListAtom.context
         .checkIfStateModificationsAreAllowed(_$dailyForecastListAtom);
     super.dailyForecastList = value;
@@ -112,10 +112,20 @@ mixin _$HomePageStore on HomePageBase, Store {
   }
 
   @override
-  void setDailyForecastList(List<DailyForecast> value) {
+  void addDailyForecast(DailyForecast value) {
     final _$actionInfo = _$HomePageBaseActionController.startAction();
     try {
-      return super.setDailyForecastList(value);
+      return super.addDailyForecast(value);
+    } finally {
+      _$HomePageBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearDailyForecast() {
+    final _$actionInfo = _$HomePageBaseActionController.startAction();
+    try {
+      return super.clearDailyForecast();
     } finally {
       _$HomePageBaseActionController.endAction(_$actionInfo);
     }

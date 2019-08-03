@@ -1,19 +1,19 @@
-import 'package:d9l_weather/model.dart';
+import 'package:d9l_weather/models/model.dart';
 import 'package:dio/dio.dart';
 
-class DioClient {
-  factory DioClient() => _getInstance();
-  static DioClient get instance => _getInstance();
-  static DioClient _instance; // 单例对象
+class Api {
+  factory Api() => _getInstance();
+  static Api get instance => _getInstance();
+  static Api _instance; // 单例对象
 
-  static DioClient _getInstance() {
+  static Api _getInstance() {
     if (_instance == null) {
-      _instance = DioClient._internal();
+      _instance = Api._internal();
     }
     return _instance;
   }
 
-  DioClient._internal();
+  Api._internal();
 
   static final String rootUrl = 'https://free-api.heweather.net/s6/weather';
   static final String key = 'd77fe2f561f44c1b8a8d365ad503e9bf';

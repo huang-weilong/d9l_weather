@@ -1,5 +1,6 @@
-import 'package:d9l_weather/model.dart';
-import 'package:d9l_weather/search_page.dart';
+import 'package:d9l_weather/models/model.dart';
+import 'package:d9l_weather/pages/search_page.dart';
+import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import 'about_page.dart';
-import 'store/home_page_store.dart';
+import 'package:d9l_weather/pages/about_page.dart';
 
 class HomePage extends StatelessWidget {
   @override

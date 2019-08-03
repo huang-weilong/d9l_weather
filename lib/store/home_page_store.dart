@@ -1,8 +1,8 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobx/mobx.dart';
 
-import '../dio_client.dart';
-import '../model.dart';
+import 'package:d9l_weather/api/api.dart';
+import 'package:d9l_weather/models/model.dart';
 import '../sp_client.dart';
 part 'home_page_store.g.dart';
 
@@ -11,7 +11,7 @@ class HomePageStore = HomePageBase with _$HomePageStore;
 /// 命令行运行 flutter packages pub run build_runner build
 /// flutter packages pub run build_runner watch
 
-/// 全局 counter 对象
+/// 全局 homePageStore 对象
 final HomePageStore homePageStore = HomePageStore();
 
 abstract class HomePageBase implements Store {
@@ -25,7 +25,7 @@ abstract class HomePageBase implements Store {
   RealTimeWeather realTimeWeather;
 
   @observable
-  List<DailyForecast> dailyForecastList = [];
+  ObservableList<DailyForecast> dailyForecastList = ObservableList<DailyForecast>();
 
   @action
   void setNetworkStatus(bool value) {
@@ -43,13 +43,18 @@ abstract class HomePageBase implements Store {
   }
 
   @action
-  void setDailyForecastList(List<DailyForecast> value) {
-    this.dailyForecastList = value;
+  void addDailyForecast(DailyForecast value) {
+    this.dailyForecastList.add(value);
+  }
+
+  @action
+  void clearDailyForecast() {
+    this.dailyForecastList.clear();
   }
 
   @action
   Future<void> updateWeather(String cid) async {
-    RealTimeWeather v = await DioClient().getRealTimeWeather(cid);
+    RealTimeWeather v = await Api().getRealTimeWeather(cid);
 
     if (v != null) {
       if (v.status.contains('permission')) {
@@ -67,9 +72,12 @@ abstract class HomePageBase implements Store {
       setRealTimeWeather(v);
     }
 
-    await DioClient().getThreeDaysForecast(cid).then((v) {
+    await Api().getThreeDaysForecast(cid).then((v) {
       if (v != null) {
-        setDailyForecastList(v.dailyForecasts);
+        clearDailyForecast();
+        for (var d in v.dailyForecasts) {
+          addDailyForecast(d);
+        }
       }
     });
 
@@ -92,6 +100,9 @@ abstract class HomePageBase implements Store {
       DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-29 13:23:10'),
     ];
     setRealTimeWeather(_noNetworkWeather);
-    setDailyForecastList(_noNetworkForecastList);
+    clearDailyForecast();
+    for (var v in _noNetworkForecastList) {
+      addDailyForecast(v);
+    }
   }
 }

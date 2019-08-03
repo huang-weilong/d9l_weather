@@ -12,13 +12,13 @@ mixin _$SearchPageStore on SearchPageBase, Store {
   final _$cityListAtom = Atom(name: 'SearchPageBase.cityList');
 
   @override
-  List<Basic> get cityList {
+  ObservableList<Basic> get cityList {
     _$cityListAtom.reportObserved();
     return super.cityList;
   }
 
   @override
-  set cityList(List<Basic> value) {
+  set cityList(ObservableList<Basic> value) {
     _$cityListAtom.context.checkIfStateModificationsAreAllowed(_$cityListAtom);
     super.cityList = value;
     _$cityListAtom.reportChanged();
@@ -28,10 +28,20 @@ mixin _$SearchPageStore on SearchPageBase, Store {
       ActionController(name: 'SearchPageBase');
 
   @override
-  void setCityList(List<Basic> list) {
+  void addCity(Basic city) {
     final _$actionInfo = _$SearchPageBaseActionController.startAction();
     try {
-      return super.setCityList(list);
+      return super.addCity(city);
+    } finally {
+      _$SearchPageBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearCityList() {
+    final _$actionInfo = _$SearchPageBaseActionController.startAction();
+    try {
+      return super.clearCityList();
     } finally {
       _$SearchPageBaseActionController.endAction(_$actionInfo);
     }

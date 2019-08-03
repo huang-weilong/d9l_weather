@@ -1,7 +1,6 @@
+import 'package:d9l_weather/store/search_page_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
-import 'store/search_page_store.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -11,7 +10,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
-    searchPageStore.setCityList([]);
+    searchPageStore.clearCityList();
     super.dispose();
   }
 
