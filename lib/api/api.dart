@@ -17,7 +17,8 @@ class Api {
 
   static final String rootUrl = 'https://free-api.heweather.net/s6/weather';
   static final String key = 'd77fe2f561f44c1b8a8d365ad503e9bf';
-  static final Options options = Options(connectTimeout: 10000);
+  static final Options options = Options();
+  static final BaseOptions baseOptions = BaseOptions(connectTimeout: 10000);
 
   // 实况天气  Real-time weather
   Future getRealTimeWeather(String cid) async {
@@ -25,7 +26,7 @@ class Api {
 //    String url = rootUrl + '/now?location=beijing&lang=en&key=$key'; // 支持多语言
 
     try {
-      Response response = await Dio().get(url, options: options, queryParameters: {
+      Response response = await Dio(baseOptions).get(url, options: options, queryParameters: {
         'location': cid,
         'key': key,
       });
@@ -40,7 +41,7 @@ class Api {
   Future<ThreeDaysForecast> getThreeDaysForecast(String cid) async {
     String url = rootUrl + '/forecast';
     try {
-      Response response = await Dio().get(url, options: options, queryParameters: {
+      Response response = await Dio(baseOptions).get(url, options: options, queryParameters: {
         'location': cid,
         'key': key,
       });
@@ -63,7 +64,7 @@ class Api {
   Future<void> getLifeStyle() async {
     String url = rootUrl + '/lifestyle?location=beijing&key=$key';
     try {
-      Response response = await Dio().get(url, options: options);
+      Response response = await Dio(baseOptions).get(url, options: options);
       TodayLifeStyle todayLifeStyle = TodayLifeStyle.fromJson(response.data['HeWeather6'].first);
       todayLifeStyle.basic = Basic.fromJson(todayLifeStyle.mBasic);
       todayLifeStyle.update = Update.fromJson(todayLifeStyle.mUpdate);
@@ -80,7 +81,7 @@ class Api {
   Future<List<Basic>> searchCity(String keyword) async {
     String url = 'https://search.heweather.net/find';
     try {
-      Response response = await Dio().get(url, options: options, queryParameters: {
+      Response response = await Dio(baseOptions).get(url, options: options, queryParameters: {
         'location': keyword,
         'key': key,
         'mode': '',
