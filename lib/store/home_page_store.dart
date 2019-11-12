@@ -1,9 +1,11 @@
+import 'package:d9l_weather/controller/api_controller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:d9l_weather/api/api.dart';
 import 'package:d9l_weather/models/model.dart';
 import '../sp_client.dart';
+
 part 'home_page_store.g.dart';
 
 class HomePageStore = HomePageBase with _$HomePageStore;
@@ -14,7 +16,7 @@ class HomePageStore = HomePageBase with _$HomePageStore;
 /// 全局 homePageStore 对象
 final HomePageStore homePageStore = HomePageStore();
 
-abstract class HomePageBase implements Store {
+abstract class HomePageBase with Store {
   @observable
   bool isNoNetwork = false;
 
@@ -33,8 +35,8 @@ abstract class HomePageBase implements Store {
   }
 
   @action
-  void _setCid(String value) {
-    this.cid = value;
+  void setCid(String cid) {
+    this.cid = cid;
   }
 
   @action
@@ -54,7 +56,7 @@ abstract class HomePageBase implements Store {
 
   @action
   Future<void> updateWeather(String cid) async {
-    RealTimeWeather v = await Api().getRealTimeWeather(cid);
+    RealTimeWeather v = await ApiController().getRealTimeWeather(cid);
 
     if (v != null) {
       if (v.status.contains('permission')) {
@@ -68,7 +70,7 @@ abstract class HomePageBase implements Store {
         return;
       }
       SpClient.sp.setString('cid', cid);
-      _setCid(cid);
+      setCid(cid);
       setRealTimeWeather(v);
     }
 
@@ -105,4 +107,7 @@ abstract class HomePageBase implements Store {
       addDailyForecast(v);
     }
   }
+
+  @override
+  void dispose() {}
 }

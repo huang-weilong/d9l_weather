@@ -20,7 +20,7 @@ class Api {
   static final Options options = Options(connectTimeout: 10000);
 
   // 实况天气  Real-time weather
-  Future<RealTimeWeather> getRealTimeWeather(String cid) async {
+  Future getRealTimeWeather(String cid) async {
     String url = rootUrl + '/now';
 //    String url = rootUrl + '/now?location=beijing&lang=en&key=$key'; // 支持多语言
 
@@ -29,16 +29,7 @@ class Api {
         'location': cid,
         'key': key,
       });
-      print('#############>> ${response.data}');
-      RealTimeWeather realTimeWeather;
-      realTimeWeather = RealTimeWeather.fromJson(response.data['HeWeather6'].first);
-      if (realTimeWeather.status == 'ok') {
-        realTimeWeather.basic = Basic.fromJson(realTimeWeather.mBasic);
-        realTimeWeather.update = Update.fromJson(realTimeWeather.mUpdate);
-        realTimeWeather.now = Now.fromJson(realTimeWeather.mNow);
-      }
-
-      return realTimeWeather;
+      return response.data;
     } catch (e) {
       print('getRealTimeWeather error= $e');
       return null;

@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 
 import 'package:d9l_weather/api/api.dart';
 import 'package:d9l_weather/models/model.dart';
+
 part 'search_page_store.g.dart';
 
 class SearchPageStore = SearchPageBase with _$SearchPageStore;
@@ -12,7 +13,7 @@ class SearchPageStore = SearchPageBase with _$SearchPageStore;
 /// 全局 searchPageStore 对象
 final SearchPageStore searchPageStore = SearchPageStore();
 
-abstract class SearchPageBase implements Store {
+abstract class SearchPageBase with Store {
   @observable
   ObservableList<Basic> cityList = ObservableList<Basic>();
 
@@ -37,4 +38,7 @@ abstract class SearchPageBase implements Store {
       }
     });
   }
+
+  @override
+  void dispose() {}
 }

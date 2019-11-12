@@ -92,10 +92,10 @@ mixin _$HomePageStore on HomePageBase, Store {
   }
 
   @override
-  void _setCid(String value) {
+  void setCid(String cid) {
     final _$actionInfo = _$HomePageBaseActionController.startAction();
     try {
-      return super._setCid(value);
+      return super.setCid(cid);
     } finally {
       _$HomePageBaseActionController.endAction(_$actionInfo);
     }
