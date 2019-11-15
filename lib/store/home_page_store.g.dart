@@ -6,70 +6,75 @@ part of 'home_page_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomePageStore on HomePageBase, Store {
   final _$isNoNetworkAtom = Atom(name: 'HomePageBase.isNoNetwork');
 
   @override
   bool get isNoNetwork {
+    _$isNoNetworkAtom.context.enforceReadPolicy(_$isNoNetworkAtom);
     _$isNoNetworkAtom.reportObserved();
     return super.isNoNetwork;
   }
 
   @override
   set isNoNetwork(bool value) {
-    _$isNoNetworkAtom.context
-        .checkIfStateModificationsAreAllowed(_$isNoNetworkAtom);
-    super.isNoNetwork = value;
-    _$isNoNetworkAtom.reportChanged();
+    _$isNoNetworkAtom.context.conditionallyRunInAction(() {
+      super.isNoNetwork = value;
+      _$isNoNetworkAtom.reportChanged();
+    }, _$isNoNetworkAtom, name: '${_$isNoNetworkAtom.name}_set');
   }
 
   final _$cidAtom = Atom(name: 'HomePageBase.cid');
 
   @override
   String get cid {
+    _$cidAtom.context.enforceReadPolicy(_$cidAtom);
     _$cidAtom.reportObserved();
     return super.cid;
   }
 
   @override
   set cid(String value) {
-    _$cidAtom.context.checkIfStateModificationsAreAllowed(_$cidAtom);
-    super.cid = value;
-    _$cidAtom.reportChanged();
+    _$cidAtom.context.conditionallyRunInAction(() {
+      super.cid = value;
+      _$cidAtom.reportChanged();
+    }, _$cidAtom, name: '${_$cidAtom.name}_set');
   }
 
   final _$realTimeWeatherAtom = Atom(name: 'HomePageBase.realTimeWeather');
 
   @override
   RealTimeWeather get realTimeWeather {
+    _$realTimeWeatherAtom.context.enforceReadPolicy(_$realTimeWeatherAtom);
     _$realTimeWeatherAtom.reportObserved();
     return super.realTimeWeather;
   }
 
   @override
   set realTimeWeather(RealTimeWeather value) {
-    _$realTimeWeatherAtom.context
-        .checkIfStateModificationsAreAllowed(_$realTimeWeatherAtom);
-    super.realTimeWeather = value;
-    _$realTimeWeatherAtom.reportChanged();
+    _$realTimeWeatherAtom.context.conditionallyRunInAction(() {
+      super.realTimeWeather = value;
+      _$realTimeWeatherAtom.reportChanged();
+    }, _$realTimeWeatherAtom, name: '${_$realTimeWeatherAtom.name}_set');
   }
 
   final _$dailyForecastListAtom = Atom(name: 'HomePageBase.dailyForecastList');
 
   @override
   ObservableList<DailyForecast> get dailyForecastList {
+    _$dailyForecastListAtom.context.enforceReadPolicy(_$dailyForecastListAtom);
     _$dailyForecastListAtom.reportObserved();
     return super.dailyForecastList;
   }
 
   @override
   set dailyForecastList(ObservableList<DailyForecast> value) {
-    _$dailyForecastListAtom.context
-        .checkIfStateModificationsAreAllowed(_$dailyForecastListAtom);
-    super.dailyForecastList = value;
-    _$dailyForecastListAtom.reportChanged();
+    _$dailyForecastListAtom.context.conditionallyRunInAction(() {
+      super.dailyForecastList = value;
+      _$dailyForecastListAtom.reportChanged();
+    }, _$dailyForecastListAtom, name: '${_$dailyForecastListAtom.name}_set');
   }
 
   final _$updateWeatherAsyncAction = AsyncAction('updateWeather');
