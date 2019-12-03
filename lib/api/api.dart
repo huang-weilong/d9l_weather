@@ -1,3 +1,4 @@
+import 'package:d9l_weather/d9l.dart';
 import 'package:d9l_weather/models/model.dart';
 import 'package:dio/dio.dart';
 
@@ -28,6 +29,7 @@ class Api {
     try {
       Response response = await Dio(baseOptions).get(url, options: options, queryParameters: {
         'location': cid,
+        'lang': D9l().lang,
         'key': key,
       });
       return response.data;
@@ -43,6 +45,7 @@ class Api {
     try {
       Response response = await Dio(baseOptions).get(url, options: options, queryParameters: {
         'location': cid,
+        'lang': D9l().lang,
         'key': key,
       });
       ThreeDaysForecast threeDaysForecast;
@@ -83,6 +86,7 @@ class Api {
     try {
       Response response = await Dio(baseOptions).get(url, options: options, queryParameters: {
         'location': keyword,
+        'lang': D9l().lang,
         'key': key,
         'mode': '',
         'number': 20,

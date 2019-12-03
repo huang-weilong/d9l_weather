@@ -1,10 +1,12 @@
+import 'package:d9l_weather/d9l.dart';
 import 'package:d9l_weather/models/model.dart';
+import 'package:d9l_weather/pages/change_language_page.dart';
 import 'package:d9l_weather/pages/search_page.dart';
 import 'package:d9l_weather/store/home_page_store.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+//import 'package:intl/intl.dart';
 
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -13,6 +15,7 @@ import 'package:d9l_weather/pages/about_page.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    D9l().lang = Localizations.localeOf(context).languageCode;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Stack(
@@ -33,9 +36,9 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: Observer(
                     builder: (_) => Text(
-                          homePageStore.realTimeWeather.basic.location,
-                          style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
+                      homePageStore.realTimeWeather.basic.location,
+                      style: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Padding(
@@ -46,62 +49,65 @@ class HomePage extends StatelessWidget {
                     children: <Widget>[
                       Observer(
                         builder: (_) => Text(
-                              '${homePageStore.realTimeWeather.now.tmp}°',
-                              style: TextStyle(fontSize: 80.0, color: Colors.white),
-                            ),
+                          '${homePageStore.realTimeWeather.now.tmp}°',
+                          style: TextStyle(fontSize: 80.0, color: Colors.white),
+                        ),
                       ),
                       Observer(
                         builder: (_) => Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                homePageStore.realTimeWeather.now.condCode == null
-                                    ? Container()
-                                    : Image.asset('assets/images/weather/${homePageStore.realTimeWeather.now.condCode}.png',
-                                        color: Colors.white),
-                                SizedBox(height: 10.0),
-                                Text(
-                                  '${homePageStore.realTimeWeather.now.condTxt}',
-                                  style: TextStyle(fontSize: 20.0, color: Colors.white),
-                                ),
-                              ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            homePageStore.realTimeWeather.now.condCode == null
+                                ? Container()
+                                : Image.asset('assets/images/weather/${homePageStore.realTimeWeather.now.condCode}.png',
+                                    color: Colors.white),
+                            SizedBox(height: 10.0),
+                            Text(
+                              '${homePageStore.realTimeWeather.now.condTxt}',
+                              style: TextStyle(fontSize: 20.0, color: Colors.white),
                             ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Observer(
                   builder: (_) => Expanded(
-                        child: homePageStore.isNoNetwork
-                            ? Align(
-                                alignment: Alignment.center,
-                                child: Text('请检查你的网络状态', style: TextStyle(color: Colors.white, fontSize: 20.0)),
-                              )
-                            : Container(),
-                      ),
+                    child: homePageStore.isNoNetwork
+                        ? Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              AppLocalizations.of(context).tr('check_network'),
+                              style: TextStyle(color: Colors.white, fontSize: 20.0),
+                            ),
+                          )
+                        : Container(),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 20.0),
                   child: Observer(
                     builder: (_) => Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _someMessage(
-                              icon: 'assets/images/wind_direction.png',
-                              title: '风向',
-                              data: homePageStore.realTimeWeather.now.windDir,
-                            ),
-                            _someMessage(
-                              icon: 'assets/images/humidity.png',
-                              title: '湿度',
-                              data: homePageStore.realTimeWeather.now.hum + '%',
-                            ),
-                            _someMessage(
-                              icon: 'assets/images/air_pressure.png',
-                              title: '气压',
-                              data: homePageStore.realTimeWeather.now.pres + 'hpa',
-                            ),
-                          ],
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        _someMessage(
+                          icon: 'assets/images/wind_direction.png',
+                          title: AppLocalizations.of(context).tr('wind'),
+                          data: homePageStore.realTimeWeather.now.windDir,
                         ),
+                        _someMessage(
+                          icon: 'assets/images/humidity.png',
+                          title: AppLocalizations.of(context).tr('humidity'),
+                          data: homePageStore.realTimeWeather.now.hum + '%',
+                        ),
+                        _someMessage(
+                          icon: 'assets/images/air_pressure.png',
+                          title: AppLocalizations.of(context).tr('pressure'),
+                          data: homePageStore.realTimeWeather.now.pres + 'hpa',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -109,18 +115,18 @@ class HomePage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 24.0),
                   child: Observer(
                     builder: (_) => Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: homePageStore.dailyForecastList.map((item) {
-                            return _threeDayWeather(item);
-                          }).toList(),
-                        ),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: homePageStore.dailyForecastList.map((item) {
+                        return _threeDayWeather(item);
+                      }).toList(),
+                    ),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.only(bottom: 6.0),
                   color: Colors.white,
                   alignment: Alignment.center,
-                  child: Text('d9lweather', style: TextStyle(color: Color(0xffe2e2e2))),
+                  child: Text(AppLocalizations.of(context).tr('d9l_weather'), style: TextStyle(color: Color(0xffe2e2e2))),
                 ),
               ],
             ),
@@ -145,7 +151,7 @@ class HomePage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
-                          title: Text('切换城市'),
+                          title: Text(AppLocalizations.of(context).tr('change_city')),
                           onTap: () {
                             Navigator.pop(context);
                             Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
@@ -157,15 +163,15 @@ class HomePage extends StatelessWidget {
                         ),
                         Divider(height: 0.0),
                         ListTile(
-                          title: Text('选择语言'),
+                          title: Text(AppLocalizations.of(context).tr('change_language')),
                           onTap: () {
                             Navigator.pop(context);
-                            Fluttertoast.showToast(msg: '暂时不能选择语言');
+                            Navigator.push(context, CupertinoPageRoute(builder: (_) => ChangeLanguagePage()));
                           },
                         ),
                         Divider(height: 0.0),
                         ListTile(
-                          title: Text('关于'),
+                          title: Text(AppLocalizations.of(context).tr('about')),
                           onTap: () {
                             Navigator.pop(context);
                             Navigator.push(context, CupertinoPageRoute(builder: (_) => AboutPage()));
@@ -184,9 +190,10 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _threeDayWeather(DailyForecast dailyForecast) {
-    String date = DateFormat('EE', 'zh_CN').format(
-      DateTime.parse(dailyForecast.date),
-    );
+    String date = '--';
+//    String date = DateFormat('EE', 'zh_CN').format(
+//      DateTime.parse(dailyForecast.date),
+//    );
     return Column(
       children: <Widget>[
         Text(date, style: TextStyle(color: Color(0xff8a8a8a))),

@@ -1,4 +1,5 @@
 import 'package:d9l_weather/store/search_page_store.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -36,7 +37,7 @@ class _SearchPageState extends State<SearchPage> {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(0.0),
                     isDense: true,
-                    hintText: '城市名称中文/拼音',
+                    hintText: AppLocalizations.of(context).tr('city_name'),
                   ),
                   onChanged: (v) {
                     searchPageStore.getCityList(v);
@@ -44,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               IconButton(
-                icon: Text('取消'),
+                icon: Text(AppLocalizations.of(context).tr('cancel')),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -56,22 +57,22 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Observer(
         builder: (_) => ListView(
-              children: searchPageStore.cityList.map((item) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pop(context, item.cid);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(14.0),
-                    decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xffd3d3d3), width: 0.5))),
-                    child: Text(
-                      '${item.adminArea} - ${item.parentCity} - ${item.location}',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
+          children: searchPageStore.cityList.map((item) {
+            return InkWell(
+              onTap: () {
+                Navigator.pop(context, item.cid);
+              },
+              child: Container(
+                padding: EdgeInsets.all(14.0),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xffd3d3d3), width: 0.5))),
+                child: Text(
+                  '${item.adminArea} - ${item.parentCity} - ${item.location}',
+                  style: TextStyle(fontSize: 16.0),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
