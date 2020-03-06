@@ -6,7 +6,7 @@ import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -190,10 +190,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _threeDayWeather(DailyForecast dailyForecast) {
-    String date = '--';
-//    String date = DateFormat('EE', 'zh_CN').format(
-//      DateTime.parse(dailyForecast.date),
-//    );
+    String date = DateFormat('EE', D9l().lang).format(DateTime.parse(dailyForecast.date));
     return Column(
       children: <Widget>[
         Text(date, style: TextStyle(color: Color(0xff8a8a8a))),
