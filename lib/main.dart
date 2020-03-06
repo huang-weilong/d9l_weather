@@ -9,6 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'store/home_page_store.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Future.wait([SpClient.getInstance()]).then((_) async {
     if (SpClient.sp.getString('cid') == null) {
       SpClient.sp.setString('cid', 'CN101280101'); // 第一次安装APP默认显示广州天气
