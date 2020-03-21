@@ -23,7 +23,7 @@ class AboutPage extends StatelessWidget {
                 style: TextStyle(fontSize: 20.0),
               ),
               SizedBox(height: 30.0),
-              Text('GitHub：https://github.com/huang-weilong', textScaleFactor: 0.9),
+              Text('GitHub: https://github.com/huang-weilong', textScaleFactor: 0.9),
               SizedBox(height: 10.0),
               RichText(
                 textScaleFactor: 0.9,
