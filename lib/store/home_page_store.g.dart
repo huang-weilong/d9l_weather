@@ -9,55 +9,55 @@ part of 'home_page_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomePageStore on HomePageBase, Store {
-  final _$isNoNetworkAtom = Atom(name: 'HomePageBase.isNoNetwork');
+  final _$basicAtom = Atom(name: 'HomePageBase.basic');
 
   @override
-  bool get isNoNetwork {
-    _$isNoNetworkAtom.context.enforceReadPolicy(_$isNoNetworkAtom);
-    _$isNoNetworkAtom.reportObserved();
-    return super.isNoNetwork;
+  Basic get basic {
+    _$basicAtom.context.enforceReadPolicy(_$basicAtom);
+    _$basicAtom.reportObserved();
+    return super.basic;
   }
 
   @override
-  set isNoNetwork(bool value) {
-    _$isNoNetworkAtom.context.conditionallyRunInAction(() {
-      super.isNoNetwork = value;
-      _$isNoNetworkAtom.reportChanged();
-    }, _$isNoNetworkAtom, name: '${_$isNoNetworkAtom.name}_set');
+  set basic(Basic value) {
+    _$basicAtom.context.conditionallyRunInAction(() {
+      super.basic = value;
+      _$basicAtom.reportChanged();
+    }, _$basicAtom, name: '${_$basicAtom.name}_set');
   }
 
-  final _$cidAtom = Atom(name: 'HomePageBase.cid');
+  final _$updateAtom = Atom(name: 'HomePageBase.update');
 
   @override
-  String get cid {
-    _$cidAtom.context.enforceReadPolicy(_$cidAtom);
-    _$cidAtom.reportObserved();
-    return super.cid;
-  }
-
-  @override
-  set cid(String value) {
-    _$cidAtom.context.conditionallyRunInAction(() {
-      super.cid = value;
-      _$cidAtom.reportChanged();
-    }, _$cidAtom, name: '${_$cidAtom.name}_set');
-  }
-
-  final _$realTimeWeatherAtom = Atom(name: 'HomePageBase.realTimeWeather');
-
-  @override
-  RealTimeWeather get realTimeWeather {
-    _$realTimeWeatherAtom.context.enforceReadPolicy(_$realTimeWeatherAtom);
-    _$realTimeWeatherAtom.reportObserved();
-    return super.realTimeWeather;
+  Update get update {
+    _$updateAtom.context.enforceReadPolicy(_$updateAtom);
+    _$updateAtom.reportObserved();
+    return super.update;
   }
 
   @override
-  set realTimeWeather(RealTimeWeather value) {
-    _$realTimeWeatherAtom.context.conditionallyRunInAction(() {
-      super.realTimeWeather = value;
-      _$realTimeWeatherAtom.reportChanged();
-    }, _$realTimeWeatherAtom, name: '${_$realTimeWeatherAtom.name}_set');
+  set update(Update value) {
+    _$updateAtom.context.conditionallyRunInAction(() {
+      super.update = value;
+      _$updateAtom.reportChanged();
+    }, _$updateAtom, name: '${_$updateAtom.name}_set');
+  }
+
+  final _$nowAtom = Atom(name: 'HomePageBase.now');
+
+  @override
+  Now get now {
+    _$nowAtom.context.enforceReadPolicy(_$nowAtom);
+    _$nowAtom.reportObserved();
+    return super.now;
+  }
+
+  @override
+  set now(Now value) {
+    _$nowAtom.context.conditionallyRunInAction(() {
+      super.now = value;
+      _$nowAtom.reportChanged();
+    }, _$nowAtom, name: '${_$nowAtom.name}_set');
   }
 
   final _$dailyForecastListAtom = Atom(name: 'HomePageBase.dailyForecastList');
@@ -77,72 +77,44 @@ mixin _$HomePageStore on HomePageBase, Store {
     }, _$dailyForecastListAtom, name: '${_$dailyForecastListAtom.name}_set');
   }
 
-  final _$updateWeatherAsyncAction = AsyncAction('updateWeather');
+  final _$lifeStyleListAtom = Atom(name: 'HomePageBase.lifeStyleList');
 
   @override
-  Future<void> updateWeather(String cid) {
-    return _$updateWeatherAsyncAction.run(() => super.updateWeather(cid));
-  }
-
-  final _$HomePageBaseActionController = ActionController(name: 'HomePageBase');
-
-  @override
-  void setNetworkStatus(bool value) {
-    final _$actionInfo = _$HomePageBaseActionController.startAction();
-    try {
-      return super.setNetworkStatus(value);
-    } finally {
-      _$HomePageBaseActionController.endAction(_$actionInfo);
-    }
+  ObservableList<LifeStyle> get lifeStyleList {
+    _$lifeStyleListAtom.context.enforceReadPolicy(_$lifeStyleListAtom);
+    _$lifeStyleListAtom.reportObserved();
+    return super.lifeStyleList;
   }
 
   @override
-  void setCid(String cid) {
-    final _$actionInfo = _$HomePageBaseActionController.startAction();
-    try {
-      return super.setCid(cid);
-    } finally {
-      _$HomePageBaseActionController.endAction(_$actionInfo);
-    }
+  set lifeStyleList(ObservableList<LifeStyle> value) {
+    _$lifeStyleListAtom.context.conditionallyRunInAction(() {
+      super.lifeStyleList = value;
+      _$lifeStyleListAtom.reportChanged();
+    }, _$lifeStyleListAtom, name: '${_$lifeStyleListAtom.name}_set');
+  }
+
+  final _$airQualityAtom = Atom(name: 'HomePageBase.airQuality');
+
+  @override
+  AirQuality get airQuality {
+    _$airQualityAtom.context.enforceReadPolicy(_$airQualityAtom);
+    _$airQualityAtom.reportObserved();
+    return super.airQuality;
   }
 
   @override
-  void setRealTimeWeather(RealTimeWeather value) {
-    final _$actionInfo = _$HomePageBaseActionController.startAction();
-    try {
-      return super.setRealTimeWeather(value);
-    } finally {
-      _$HomePageBaseActionController.endAction(_$actionInfo);
-    }
+  set airQuality(AirQuality value) {
+    _$airQualityAtom.context.conditionallyRunInAction(() {
+      super.airQuality = value;
+      _$airQualityAtom.reportChanged();
+    }, _$airQualityAtom, name: '${_$airQualityAtom.name}_set');
   }
 
-  @override
-  void addDailyForecast(DailyForecast value) {
-    final _$actionInfo = _$HomePageBaseActionController.startAction();
-    try {
-      return super.addDailyForecast(value);
-    } finally {
-      _$HomePageBaseActionController.endAction(_$actionInfo);
-    }
-  }
+  final _$getWeatherAsyncAction = AsyncAction('getWeather');
 
   @override
-  void clearDailyForecast() {
-    final _$actionInfo = _$HomePageBaseActionController.startAction();
-    try {
-      return super.clearDailyForecast();
-    } finally {
-      _$HomePageBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void _setEmptyData(String title) {
-    final _$actionInfo = _$HomePageBaseActionController.startAction();
-    try {
-      return super._setEmptyData(title);
-    } finally {
-      _$HomePageBaseActionController.endAction(_$actionInfo);
-    }
+  Future<bool> getWeather() {
+    return _$getWeatherAsyncAction.run(() => super.getWeather());
   }
 }

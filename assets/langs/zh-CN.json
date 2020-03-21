@@ -10,5 +10,11 @@
   "check_network": "请检查你的网络状态",
   "d9l_weather": "d9l天气",
   "cancel": "取消",
-  "city_name": "城市名称"
+  "city_name": "请输入城市名称",
+  "apparent": "体感",
+  "air": "空气",
+  "lifestyle": "生活指数",
+  "data_sources": "数据来源：和风天气",
+  "description": "该应用是基于flutter框架进行开发的项目，仅供学习。如有疑问可在GitHub中提交issue或在简书中留言。",
+  "jianshu": "简书"
 }

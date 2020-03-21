@@ -95,8 +95,8 @@ class Now {
 class DailyForecast {
   String condCodeD;
   String condCodeN;
-  String condTxtD;
-  String condTxtN;
+  String condTxtD; // 白天天气状况描述
+  String condTxtN; // 夜间天气状况描述
   String date;
   String hum;
   String mr;
@@ -163,16 +163,13 @@ class DailyForecast {
         windSpd = json['wind_spd'];
 }
 
+// 生活指数
 class LifeStyle {
   String type; // 生活指数类型
   String brf; // 生活指数简介
   String txt; // 生活指数详细描述
 
-  LifeStyle({
-    this.type,
-    this.brf,
-    this.txt,
-  });
+  LifeStyle({this.type, this.brf, this.txt});
 
   LifeStyle.fromJson(Map<String, dynamic> json)
       : type = json['type'],
@@ -180,87 +177,41 @@ class LifeStyle {
         txt = json['txt'];
 }
 
-//////////////////////////////////////////////////////////////////
+// 空气质量
+class AirQuality {
+  String aqi; // 空气质量指数
+  String qlty; //空气质量
+  String main; // 主要污染物
+  String pm25;
+  String pm10;
+  String no2;
+  String so2;
+  String co;
+  String o3;
+  String pubTime;
 
-// 实况天气
-class RealTimeWeather {
-  Map mBasic;
-  Map mUpdate;
-  Map mNow;
-  String status; // 接口状态
-
-  Basic basic;
-  Update update;
-  Now now;
-
-  RealTimeWeather({
-    this.mBasic,
-    this.mUpdate,
-    this.mNow,
-    this.status,
-    this.basic,
-    this.update,
-    this.now,
+  AirQuality({
+    this.aqi,
+    this.qlty,
+    this.main,
+    this.pm25,
+    this.pm10,
+    this.no2,
+    this.so2,
+    this.co,
+    this.o3,
+    this.pubTime,
   });
 
-  RealTimeWeather.fromJson(Map<String, dynamic> json)
-      : mBasic = json['basic'],
-        mUpdate = json['update'],
-        status = json['status'],
-        mNow = json['now'];
-}
-
-// 3天预报
-class ThreeDaysForecast {
-  Map mBasic;
-  Map mUpdate;
-  List mDailyForecasts;
-
-  String status;
-  Basic basic;
-  Update update;
-  List<DailyForecast> dailyForecasts = [];
-
-  ThreeDaysForecast({
-    this.mBasic,
-    this.mUpdate,
-    this.mDailyForecasts,
-    this.status,
-    this.basic,
-    this.update,
-    this.dailyForecasts,
-  });
-
-  ThreeDaysForecast.fromJson(Map<String, dynamic> json)
-      : mBasic = json['basic'],
-        mUpdate = json['update'],
-        status = json['status'],
-        mDailyForecasts = json['daily_forecast'];
-}
-
-// 生活指数
-class TodayLifeStyle {
-  Map mBasic;
-  Map mUpdate;
-  List mLifeStyles;
-
-  String status;
-  Basic basic;
-  Update update;
-  List<LifeStyle> lifeStyles = [];
-
-  TodayLifeStyle({
-    this.mBasic,
-    this.mUpdate,
-    this.mLifeStyles,
-    this.status,
-    this.basic,
-    this.update,
-    this.lifeStyles,
-  });
-  TodayLifeStyle.fromJson(Map<String, dynamic> json)
-      : mBasic = json['basic'],
-        mUpdate = json['update'],
-        status = json['status'],
-        mLifeStyles = json['lifestyle'];
+  AirQuality.fromJson(Map<String, dynamic> json)
+      : aqi = json['aqi'],
+        qlty = json['qlty'],
+        main = json['main'],
+        pm25 = json['pm25'],
+        pm10 = json['pm10'],
+        no2 = json['no2'],
+        so2 = json['so2'],
+        co = json['co'],
+        o3 = json['o3'],
+        pubTime = json['pub_time'];
 }

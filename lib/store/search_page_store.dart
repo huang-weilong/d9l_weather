@@ -1,6 +1,7 @@
+import 'package:d9l_weather/d9l.dart';
+import 'package:d9l_weather/utils/http.dart';
 import 'package:mobx/mobx.dart';
 
-import 'package:d9l_weather/api/api.dart';
 import 'package:d9l_weather/models/model.dart';
 
 part 'search_page_store.g.dart';
@@ -29,16 +30,26 @@ abstract class SearchPageBase with Store {
 
   @action
   void getCityList(String v) {
-    Api().searchCity(v).then((result) {
+    // 搜索城市
+    Http().get('https://search.heweather.net/find', {
+      'location': v,
+      'lang': D9l().lang,
+      'key': Http.key,
+      'mode': '',
+      'number': 20,
+    }).then((result) {
       if (result != null) {
+        List<Basic> cityList = [];
+        if (result['HeWeather6'] != null) {
+          for (var c in result['HeWeather6'].first['basic']) {
+            cityList.add(Basic.fromJson(c));
+          }
+        }
         clearCityList();
-        for (var v in result) {
+        for (var v in cityList) {
           addCity(v);
         }
       }
     });
   }
-
-  @override
-  void dispose() {}
 }

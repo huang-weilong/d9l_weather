@@ -1,8 +1,8 @@
-import 'package:d9l_weather/controller/api_controller.dart';
+import 'package:d9l_weather/d9l.dart';
+import 'package:d9l_weather/utils/http.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobx/mobx.dart';
 
-import 'package:d9l_weather/api/api.dart';
 import 'package:d9l_weather/models/model.dart';
 import '../sp_client.dart';
 
@@ -18,96 +18,140 @@ final HomePageStore homePageStore = HomePageStore();
 
 abstract class HomePageBase with Store {
   @observable
-  bool isNoNetwork = false;
-
+  Basic basic;
   @observable
+  Update update;
+  @observable
+  Now now;
+  String status;
   String cid;
-
-  @observable
-  RealTimeWeather realTimeWeather;
-
   @observable
   ObservableList<DailyForecast> dailyForecastList = ObservableList<DailyForecast>();
+  @observable
+  ObservableList<LifeStyle> lifeStyleList = ObservableList<LifeStyle>();
+  @observable
+  AirQuality airQuality;
+  Map lsType = {
+    'comf': '舒适度',
+    'cw': '洗车',
+    'drsg': '穿衣',
+    'flu': '感冒',
+    'sport': '运动',
+    'trav': '旅游',
+    'uv': '紫外线',
+    'air': '空气',
+  };
 
   @action
-  void setNetworkStatus(bool value) {
-    this.isNoNetwork = value;
-  }
+  Future<bool> getWeather() async {
+//    status = null;
 
-  @action
-  void setCid(String cid) {
-    this.cid = cid;
-  }
+    await _getNow();
+    await _getForecast();
+    await _getAirQuality();
+    await _getLifeStyle();
 
-  @action
-  void setRealTimeWeather(RealTimeWeather value) {
-    this.realTimeWeather = value;
-  }
-
-  @action
-  void addDailyForecast(DailyForecast value) {
-    this.dailyForecastList.add(value);
-  }
-
-  @action
-  void clearDailyForecast() {
-    this.dailyForecastList.clear();
-  }
-
-  @action
-  Future<void> updateWeather(String cid) async {
-    RealTimeWeather v = await ApiController().getRealTimeWeather(cid);
-
-    if (v != null) {
-      if (v.status.contains('permission')) {
-        Fluttertoast.showToast(msg: '没有权限');
-        return;
-      } else if (v.status.contains('unknown')) {
-        Fluttertoast.showToast(msg: '无法查询该地址天气');
-        return;
-      } else if (v.status.contains('no more')) {
-        _setEmptyData('查询次数超上限');
-        return;
+    if (status != null) {
+      if (status.contains('permission')) {
+        this.cid = SpClient.sp.getString('cid');
+        Fluttertoast.showToast(msg: D9l.toastStr[D9l().lang]['permission']);
+        return false;
+      } else if (status.contains('unknown')) {
+        this.cid = SpClient.sp.getString('cid');
+        Fluttertoast.showToast(msg: D9l.toastStr[D9l().lang]['unknown']);
+        return false;
+      } else if (status.contains('no more')) {
+        this.cid = SpClient.sp.getString('cid');
+        Fluttertoast.showToast(msg: D9l.toastStr[D9l().lang]['no_more_requests']);
+        _setEmptyData();
+        return false;
       }
       SpClient.sp.setString('cid', cid);
-      setCid(cid);
-      setRealTimeWeather(v);
+      return true;
+    } else {
+      _setEmptyData();
+      return false;
     }
+  }
 
-    await Api().getThreeDaysForecast(cid).then((v) {
-      if (v != null) {
-        clearDailyForecast();
-        for (var d in v.dailyForecasts) {
-          addDailyForecast(d);
-        }
-      }
+  void _setEmptyData() {
+    basic = Basic(location: '??');
+    now = Now(tmp: '??', pres: '??', windDir: '??', hum: '??', fl: '??', condTxt: '??');
+    dailyForecastList.clear();
+    for (int i = 0; i < 3; i++) {
+      dailyForecastList.add(DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-2$i 13:23:10'));
+    }
+  }
+
+  // 实况天气
+  Future _getNow() async {
+    var result = await Http().get('/weather/now', {
+      'location': cid,
+      'lang': D9l().lang,
+      'key': Http.key,
     });
 
-    if (this.realTimeWeather == null) {
-      _setEmptyData('未知');
-    } else {
-      Fluttertoast.showToast(msg: '更新成功');
+    if (result != null) {
+      status = result['HeWeather6'].first['status'];
+      if (status == 'ok') {
+        basic = Basic.fromJson(result['HeWeather6'].first['basic']);
+        update = Update.fromJson(result['HeWeather6'].first['update']);
+        now = Now.fromJson(result['HeWeather6'].first['now']);
+      }
     }
   }
 
-  @action
-  void _setEmptyData(String title) {
-    RealTimeWeather _noNetworkWeather = RealTimeWeather(
-      basic: Basic(location: title),
-      now: Now(tmp: 'N/A', condTxt: '', windDir: '--', hum: '--', pres: '--'),
-    );
-    List<DailyForecast> _noNetworkForecastList = [
-      DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-27 13:23:10'),
-      DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-28 13:23:10'),
-      DailyForecast(condTxtD: '???', condCodeD: '999', tmpMin: '--', tmpMax: '--', date: '2019-05-29 13:23:10'),
-    ];
-    setRealTimeWeather(_noNetworkWeather);
-    clearDailyForecast();
-    for (var v in _noNetworkForecastList) {
-      addDailyForecast(v);
+  // 获取近三天天气预报
+  Future _getForecast() async {
+    var result = await Http().get('/weather/forecast', {
+      'location': cid,
+      'lang': D9l().lang,
+      'key': Http.key,
+    });
+
+    if (result != null) {
+      status = result['HeWeather6'].first['status'];
+      if (status == 'ok') {
+        dailyForecastList.clear();
+        for (var v in result['HeWeather6'].first['daily_forecast']) {
+          dailyForecastList.add(DailyForecast.fromJson(v));
+        }
+      }
     }
   }
 
-  @override
-  void dispose() {}
+  // 生活指数
+  Future _getLifeStyle() async {
+    var result = await Http().get('/weather/lifestyle?location=$cid&key=${Http.key}', null);
+
+    try {
+      if (result != null) {
+        status = result['HeWeather6'].first['status'];
+        if (status == 'ok') {
+          lifeStyleList.clear();
+          for (var v in result['HeWeather6'].first['lifestyle']) {
+            lifeStyleList.add(LifeStyle.fromJson(v));
+          }
+        }
+      }
+    } catch (e) {
+      print('getLifeStyle error= $e');
+    }
+  }
+
+  // 空气质量
+  Future _getAirQuality() async {
+    var result = await Http().get('/air/now', {
+      'location': cid,
+      'lang': D9l().lang,
+      'key': Http.key,
+    });
+
+    if (result != null) {
+      status = result['HeWeather6'].first['status'];
+      if (status == 'ok') {
+        airQuality = AirQuality.fromJson(result['HeWeather6'].first['air_now_city']);
+      }
+    }
+  }
 }

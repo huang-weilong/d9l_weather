@@ -1,3 +1,4 @@
+import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:d9l_weather/store/search_page_store.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
         child: Container(
-          color: Colors.blue.withOpacity(0.6),
+          color: Color(0xff6994bd),
           padding: EdgeInsets.only(top: statusBarHeight, left: 10.0, right: 10.0),
           child: Row(
             children: <Widget>[
@@ -33,19 +34,21 @@ class _SearchPageState extends State<SearchPage> {
               Flexible(
                 child: TextField(
                   scrollPadding: EdgeInsets.all(0.0),
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(0.0),
                     isDense: true,
                     hintText: AppLocalizations.of(context).tr('city_name'),
+                    hintStyle: TextStyle(color: Colors.white),
                   ),
                   onChanged: (v) {
-                    searchPageStore.getCityList(v);
+                    if (v != '') searchPageStore.getCityList(v);
                   },
                 ),
               ),
               IconButton(
-                icon: Text(AppLocalizations.of(context).tr('cancel')),
+                icon: Text(AppLocalizations.of(context).tr('cancel'), style: TextStyle(color: Colors.white)),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -60,7 +63,8 @@ class _SearchPageState extends State<SearchPage> {
           children: searchPageStore.cityList.map((item) {
             return InkWell(
               onTap: () {
-                Navigator.pop(context, item.cid);
+                homePageStore.cid = item.cid;
+                Navigator.pop(context, true);
               },
               child: Container(
                 padding: EdgeInsets.all(14.0),

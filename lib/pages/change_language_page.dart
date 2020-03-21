@@ -1,4 +1,5 @@
 import 'package:d9l_weather/d9l.dart';
+import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -16,23 +17,36 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
         title: Text(AppLocalizations.of(context).tr('change_language')),
         elevation: 0.0,
         centerTitle: true,
+        backgroundColor: Color(0xff6994bd),
       ),
+      backgroundColor: Color(0xffe3e3e3),
       body: Center(
         child: Column(
           children: <Widget>[
-            RaisedButton(
-              onPressed: () {
-                data.changeLocale(Locale("zh", "CN"));
-                D9l().lang = 'zh';
-              },
-              child: Text(AppLocalizations.of(context).tr('Chinese')),
+            Container(
+              color: Colors.white,
+              child: ListTile(
+                title: Text(AppLocalizations.of(context).tr('Chinese')),
+                trailing: D9l().lang == 'zh' ? Icon(Icons.check, color: Colors.green) : null,
+                onTap: () {
+                  data.changeLocale(Locale("zh", "CN"));
+                  D9l().lang = 'zh';
+                  homePageStore.getWeather();
+                },
+              ),
             ),
-            RaisedButton(
-              onPressed: () {
-                data.changeLocale(Locale("en", "US"));
-                D9l().lang = 'en';
-              },
-              child: Text(AppLocalizations.of(context).tr('English')),
+            Container(
+              margin: EdgeInsets.only(top: 1.0),
+              color: Colors.white,
+              child: ListTile(
+                title: Text(AppLocalizations.of(context).tr('English')),
+                trailing: D9l().lang == 'en' ? Icon(Icons.check, color: Colors.green) : null,
+                onTap: () {
+                  data.changeLocale(Locale("en", "US"));
+                  D9l().lang = 'en';
+                  homePageStore.getWeather();
+                },
+              ),
             ),
           ],
         ),
