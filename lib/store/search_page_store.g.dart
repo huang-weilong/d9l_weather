@@ -26,36 +26,10 @@ mixin _$SearchPageStore on SearchPageBase, Store {
     }, _$cityListAtom, name: '${_$cityListAtom.name}_set');
   }
 
-  final _$SearchPageBaseActionController =
-      ActionController(name: 'SearchPageBase');
+  final _$getCityListAsyncAction = AsyncAction('getCityList');
 
   @override
-  void addCity(Basic city) {
-    final _$actionInfo = _$SearchPageBaseActionController.startAction();
-    try {
-      return super.addCity(city);
-    } finally {
-      _$SearchPageBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearCityList() {
-    final _$actionInfo = _$SearchPageBaseActionController.startAction();
-    try {
-      return super.clearCityList();
-    } finally {
-      _$SearchPageBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void getCityList(String v) {
-    final _$actionInfo = _$SearchPageBaseActionController.startAction();
-    try {
-      return super.getCityList(v);
-    } finally {
-      _$SearchPageBaseActionController.endAction(_$actionInfo);
-    }
+  Future getCityList(String v) {
+    return _$getCityListAsyncAction.run(() => super.getCityList(v));
   }
 }

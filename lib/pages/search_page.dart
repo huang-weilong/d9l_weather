@@ -12,7 +12,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
-    searchPageStore.clearCityList();
+    searchPageStore.cityList.clear();
     super.dispose();
   }
 

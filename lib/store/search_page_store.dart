@@ -18,38 +18,25 @@ abstract class SearchPageBase with Store {
   @observable
   ObservableList<Basic> cityList = ObservableList<Basic>();
 
+  // 搜索城市
   @action
-  void addCity(Basic city) {
-    this.cityList.add(city);
-  }
-
-  @action
-  void clearCityList() {
-    this.cityList.clear();
-  }
-
-  @action
-  void getCityList(String v) {
-    // 搜索城市
-    Http().get('https://search.heweather.net/find', {
+  Future getCityList(String v) async {
+    var result = await Http().get('https://search.heweather.net/find', {
       'location': v,
       'lang': D9l().lang,
       'key': Http.key,
       'mode': '',
       'number': 20,
-    }).then((result) {
-      if (result != null) {
-        List<Basic> cityList = [];
-        if (result['HeWeather6'] != null) {
-          for (var c in result['HeWeather6'].first['basic']) {
-            cityList.add(Basic.fromJson(c));
-          }
-        }
-        clearCityList();
-        for (var v in cityList) {
-          addCity(v);
+    });
+
+    if (result != null) {
+      String status = result['HeWeather6'].first['status'];
+      if (status == 'ok') {
+        cityList.clear();
+        for (var c in result['HeWeather6'].first['basic']) {
+          cityList.add(Basic.fromJson(c));
         }
       }
-    });
+    }
   }
 }

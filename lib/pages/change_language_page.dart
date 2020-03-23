@@ -1,4 +1,5 @@
 import 'package:d9l_weather/d9l.dart';
+import 'package:d9l_weather/sp_client.dart';
 import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                 onTap: () {
                   data.changeLocale(Locale("zh", "CN"));
                   D9l().lang = 'zh';
+                  SpClient.sp.setString('lang', 'zh');
                   homePageStore.getWeather();
                 },
               ),
@@ -44,6 +46,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                 onTap: () {
                   data.changeLocale(Locale("en", "US"));
                   D9l().lang = 'en';
+                  SpClient.sp.setString('lang', 'en');
                   homePageStore.getWeather();
                 },
               ),

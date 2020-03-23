@@ -1,3 +1,4 @@
+import 'package:d9l_weather/d9l.dart';
 import 'package:d9l_weather/pages/home_page.dart';
 import 'package:d9l_weather/sp_client.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -13,6 +14,7 @@ void main() {
       SpClient.sp.setString('cid', 'CN101280101'); // 第一次安装APP默认显示广州天气
     }
     homePageStore.cid = SpClient.sp.getString('cid');
+    D9l().lang = SpClient.sp.getString('lang') ?? 'zh';
     await homePageStore.getWeather();
     runApp(EasyLocalization(child: MyApp()));
   });

@@ -3,6 +3,7 @@ import 'package:d9l_weather/models/model.dart';
 import 'package:d9l_weather/pages/about_page.dart';
 import 'package:d9l_weather/pages/change_language_page.dart';
 import 'package:d9l_weather/pages/search_page.dart';
+import 'package:d9l_weather/sp_client.dart';
 import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     D9l().lang = Localizations.localeOf(context).languageCode;
+    SpClient.sp.setString('lang', D9l().lang);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff6994bd),
@@ -62,7 +64,7 @@ class HomePage extends StatelessWidget {
                     Text('${homePageStore.now?.condTxt}', style: TextStyle(fontSize: 32.0, color: Colors.white)),
                     Text('  |  ', style: TextStyle(color: Colors.white)),
                     Text(
-                      '${AppLocalizations.of(context).tr('air')}  ${homePageStore.airQuality?.qlty}',
+                      '${AppLocalizations.of(context).tr('air')}  ${homePageStore.airQuality?.qlty}·${homePageStore.airQuality?.aqi}',
                       style: TextStyle(fontSize: 22.0, color: Colors.white),
                     )
                   ],
