@@ -16,5 +16,6 @@
   "lifestyle": "lifestyle",
   "data_sources": "Data Sources: heweather",
   "description": "This application is a project developed based on the flutter framework and is for learning only. If in doubt, you can submit an issue in GitHub or leave a message in jianshu.",
-  "jianshu": "jianshu"
+  "jianshu": "jianshu",
+  "change_theme": "change_theme"
 }

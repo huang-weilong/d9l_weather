@@ -2,9 +2,11 @@ import 'package:d9l_weather/d9l.dart';
 import 'package:d9l_weather/models/model.dart';
 import 'package:d9l_weather/pages/about_page.dart';
 import 'package:d9l_weather/pages/change_language_page.dart';
+import 'package:d9l_weather/pages/chenge_theme_page.dart';
 import 'package:d9l_weather/pages/search_page.dart';
 import 'package:d9l_weather/sp_client.dart';
 import 'package:d9l_weather/store/home_page_store.dart';
+import 'package:d9l_weather/store/themes.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,7 @@ class HomePage extends StatelessWidget {
     SpClient.sp.setString('lang', D9l().lang);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff6994bd),
+        backgroundColor: Themes.primaryColor2,
         elevation: 0.0,
         title: Observer(
           builder: (_) => Text(
@@ -42,7 +44,7 @@ class HomePage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
-            colors: [Color(0xff375f84), Color(0xff6994bd)],
+            colors: [Themes.primaryColor1, Themes.primaryColor2],
           ),
         ),
         child: RefreshIndicator(
@@ -219,6 +221,14 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => ChangeLanguagePage()));
+              },
+            ),
+            Divider(height: 0.0),
+            ListTile(
+              title: Text(AppLocalizations.of(context).tr('change_theme')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, CupertinoPageRoute(builder: (_) => ChangeThemePage()));
               },
             ),
             Divider(height: 0.0),
