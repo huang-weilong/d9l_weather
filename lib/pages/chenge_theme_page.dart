@@ -23,7 +23,7 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              '请选择主题',
+              AppLocalizations.of(context).tr('change_theme'),
               style: TextStyle(color: Themes.primaryColor1, fontSize: 16.0),
             ),
           ),
