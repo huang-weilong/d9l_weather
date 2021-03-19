@@ -14,7 +14,7 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).tr('change_theme')),
+        title: Text('change_theme'.tr()),
         elevation: 0.0,
         backgroundColor: Themes.primaryColor1,
       ),
@@ -23,7 +23,7 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              AppLocalizations.of(context).tr('change_theme'),
+              'change_theme'.tr(),
               style: TextStyle(color: Themes.primaryColor1, fontSize: 16.0),
             ),
           ),

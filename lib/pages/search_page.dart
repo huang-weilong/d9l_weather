@@ -20,7 +20,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
         child: Container(
           color: Color(0xff6994bd),
@@ -39,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(0.0),
                     isDense: true,
-                    hintText: AppLocalizations.of(context).tr('city_name'),
+                    hintText: 'city_name'.tr(),
                     hintStyle: TextStyle(color: Colors.white),
                   ),
                   onChanged: (v) {
@@ -48,7 +47,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               IconButton(
-                icon: Text(AppLocalizations.of(context).tr('cancel'), style: TextStyle(color: Colors.white)),
+                icon: Text('cancel'.tr(), style: TextStyle(color: Colors.white)),
                 onPressed: () {
                   Navigator.pop(context);
                 },

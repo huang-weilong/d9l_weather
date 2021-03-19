@@ -12,10 +12,9 @@ class ChangeLanguagePage extends StatefulWidget {
 class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
   @override
   Widget build(BuildContext context) {
-    var data = EasyLocalizationProvider.of(context).data;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).tr('change_language')),
+        title: Text('change_language'.tr()),
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: Color(0xff6994bd),
@@ -27,10 +26,10 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
             Container(
               color: Colors.white,
               child: ListTile(
-                title: Text(AppLocalizations.of(context).tr('Chinese')),
+                title: Text('Chinese'.tr()),
                 trailing: D9l().lang == 'zh' ? Icon(Icons.check, color: Colors.green) : null,
                 onTap: () {
-                  data.changeLocale(Locale("zh", "CN"));
+                  context.setLocale(Locale("zh", "CN"));
                   D9l().lang = 'zh';
                   SpClient.sp.setString('lang', 'zh');
                   homePageStore.getWeather();
@@ -41,10 +40,10 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
               margin: EdgeInsets.only(top: 1.0),
               color: Colors.white,
               child: ListTile(
-                title: Text(AppLocalizations.of(context).tr('English')),
+                title: Text('English'.tr()),
                 trailing: D9l().lang == 'en' ? Icon(Icons.check, color: Colors.green) : null,
                 onTap: () {
-                  data.changeLocale(Locale("en", "US"));
+                  context.setLocale(Locale("en", "US"));
                   D9l().lang = 'en';
                   SpClient.sp.setString('lang', 'en');
                   homePageStore.getWeather();

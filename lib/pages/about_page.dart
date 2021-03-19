@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization_delegate.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -6,7 +6,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).tr('about')),
+        title: Text('about').tr(),
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Color(0xff6994bd),
@@ -19,7 +19,7 @@ class AboutPage extends StatelessWidget {
 //            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                AppLocalizations.of(context).tr('description'),
+                'description'.tr(),
                 style: TextStyle(fontSize: 20.0),
               ),
               SizedBox(height: 30.0),
@@ -29,7 +29,7 @@ class AboutPage extends StatelessWidget {
                 textScaleFactor: 0.9,
                 text: TextSpan(
                   style: TextStyle(color: Color(0xff333333)),
-                  text: AppLocalizations.of(context).tr('jianshu'),
+                  text: 'jianshu'.tr(),
                   children: [TextSpan(text: ': https://www.jianshu.com/p/e8e535952291')],
                 ),
               ),

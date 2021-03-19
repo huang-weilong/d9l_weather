@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
                     Text('${homePageStore.now?.condTxt}', style: TextStyle(fontSize: 32.0, color: Colors.white)),
                     Text('  |  ', style: TextStyle(color: Colors.white)),
                     Text(
-                      '${AppLocalizations.of(context).tr('air')}  ${homePageStore.airQuality?.qlty}·${homePageStore.airQuality?.aqi}',
+                      '${'air'.tr()}  ${homePageStore.airQuality?.qlty}·${homePageStore.airQuality?.aqi}',
                       style: TextStyle(fontSize: 22.0, color: Colors.white),
                     )
                   ],
@@ -90,22 +90,22 @@ class HomePage extends StatelessWidget {
                     children: <Widget>[
                       _centerWidget(
                         icon: 'assets/images/wind_direction.png',
-                        title: AppLocalizations.of(context).tr('wind'),
+                        title: 'wind'.tr(),
                         data: '${homePageStore.now?.windDir}',
                       ),
                       _centerWidget(
                         icon: 'assets/images/humidity.png',
-                        title: AppLocalizations.of(context).tr('humidity'),
+                        title: 'humidity'.tr(),
                         data: '${homePageStore.now?.hum}%',
                       ),
                       _centerWidget(
                         icon: 'assets/images/air_pressure.png',
-                        title: AppLocalizations.of(context).tr('pressure'),
+                        title: 'pressure'.tr(),
                         data: '${homePageStore.now?.pres}hpa',
                       ),
                       _centerWidget(
                         icon: 'assets/images/somatosensory.png',
-                        title: AppLocalizations.of(context).tr('apparent'),
+                        title: 'apparent'.tr(),
                         data: '${homePageStore.now?.fl}℃',
                       ),
                     ],
@@ -118,7 +118,7 @@ class HomePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(color: Colors.white)),
                 ),
-                child: Text(AppLocalizations.of(context).tr('lifestyle'), style: TextStyle(fontSize: 16.0, color: Colors.white)),
+                child: Text('lifestyle'.tr(), style: TextStyle(fontSize: 16.0, color: Colors.white)),
               ),
               Observer(
                 builder: (_) => GridView.count(
@@ -151,7 +151,7 @@ class HomePage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(AppLocalizations.of(context).tr('data_sources'), style: TextStyle(color: Color(0xaac3c3c3))),
+                    Text('data_sources'.tr(), style: TextStyle(color: Color(0xaac3c3c3))),
                     Text('d9l_weather', style: TextStyle(color: Color(0xaac3c3c3))),
                   ],
                 ),
@@ -205,7 +205,7 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              title: Text(AppLocalizations.of(context).tr('change_city')),
+              title: Text('change_city'.tr()),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
@@ -217,7 +217,7 @@ class HomePage extends StatelessWidget {
             ),
             Divider(height: 0.0),
             ListTile(
-              title: Text(AppLocalizations.of(context).tr('change_language')),
+              title: Text('change_language'.tr()),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => ChangeLanguagePage()));
@@ -225,7 +225,7 @@ class HomePage extends StatelessWidget {
             ),
             Divider(height: 0.0),
             ListTile(
-              title: Text(AppLocalizations.of(context).tr('change_theme')),
+              title: Text('change_theme'.tr()),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => ChangeThemePage()));
@@ -233,7 +233,7 @@ class HomePage extends StatelessWidget {
             ),
             Divider(height: 0.0),
             ListTile(
-              title: Text(AppLocalizations.of(context).tr('about')),
+              title: Text('about'.tr()),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => AboutPage()));
