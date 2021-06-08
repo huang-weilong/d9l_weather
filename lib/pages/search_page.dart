@@ -1,5 +1,6 @@
 import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:d9l_weather/store/search_page_store.dart';
+import 'package:d9l_weather/store/themes.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -22,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: PreferredSize(
         child: Container(
-          color: Color(0xff6994bd),
+          color: Themes.primaryColor1(context),
           padding: EdgeInsets.only(top: statusBarHeight, left: 10.0, right: 10.0),
           child: Row(
             children: <Widget>[

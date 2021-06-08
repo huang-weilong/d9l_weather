@@ -29,11 +29,19 @@ class Themes with ChangeNotifier {
     notifyListeners();
   }
 
-  static get primaryColor1 {
-    return Provider.of<Themes>(navigatorKey.currentContext)._primaryColor1;
+  static Color primaryColor1(BuildContext context) {
+    return Provider.of<Themes>(context)._primaryColor1;
   }
 
-  static get primaryColor2 {
-    return Provider.of<Themes>(navigatorKey.currentContext)._primaryColor2;
+  static Color primaryColor2(BuildContext context) {
+    return Provider.of<Themes>(context)._primaryColor2;
   }
+
+  // static get primaryColor1 {
+  //   return Provider.of<Themes>(navigatorKey.currentContext)._primaryColor1;
+  // }
+
+  // static get primaryColor2 {
+  //   return Provider.of<Themes>(navigatorKey.currentContext)._primaryColor2;
+  // }
 }

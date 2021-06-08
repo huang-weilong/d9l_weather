@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
     SpClient.sp.setString('lang', D9l().lang);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Themes.primaryColor2,
+        backgroundColor: Themes.primaryColor2(context),
         elevation: 0.0,
         title: Observer(
           builder: (_) => Text(
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
-            colors: [Themes.primaryColor1, Themes.primaryColor2],
+            colors: [Themes.primaryColor1(context), Themes.primaryColor2(context)],
           ),
         ),
         child: RefreshIndicator(

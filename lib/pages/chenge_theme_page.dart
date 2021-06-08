@@ -16,7 +16,7 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
       appBar: AppBar(
         title: Text('change_theme'.tr()),
         elevation: 0.0,
-        backgroundColor: Themes.primaryColor1,
+        backgroundColor: Themes.primaryColor1(context),
       ),
       body: Center(
         child: Column(children: [
@@ -24,7 +24,7 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'change_theme'.tr(),
-              style: TextStyle(color: Themes.primaryColor1, fontSize: 16.0),
+              style: TextStyle(color: Themes.primaryColor1(context), fontSize: 16.0),
             ),
           ),
           Row(
