@@ -22,7 +22,7 @@ void main() async {
     await homePageStore.getWeather();
     runApp(EasyLocalization(
       path: 'assets/langs',
-      supportedLocales: [Locale('en', 'US'), Locale('zh', 'CN')],
+      supportedLocales: [Locale('zh', 'CN'), Locale('en', 'US')],
       child: MyApp(),
     ));
   });

@@ -1,3 +1,4 @@
+import 'package:d9l_weather/store/themes.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -9,14 +10,13 @@ class AboutPage extends StatelessWidget {
         title: Text('about').tr(),
         centerTitle: true,
         elevation: 0.0,
-        backgroundColor: Color(0xff6994bd),
+        backgroundColor: Themes.primaryColor1(context),
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-//            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 'description'.tr(),
