@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.huangweilong.d9l_weather">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="d9l_weather"
+        android:label="d9l天气"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
