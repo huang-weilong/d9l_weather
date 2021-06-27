@@ -1,4 +1,4 @@
-import 'package:d9l_weather/d9l.dart';
+import '../utils/d9l.dart';
 import 'package:d9l_weather/utils/http.dart';
 import 'package:mobx/mobx.dart';
 

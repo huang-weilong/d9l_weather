@@ -63,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
           children: searchPageStore.cityList.map((item) {
             return InkWell(
               onTap: () {
-                homePageStore.cid = item.cid;
+                homePageStore.cid = item.cid!;
                 Navigator.pop(context, true);
               },
               child: Container(

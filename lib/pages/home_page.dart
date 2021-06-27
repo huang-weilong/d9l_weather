@@ -1,10 +1,10 @@
-import 'package:d9l_weather/d9l.dart';
+import '../utils/d9l.dart';
 import 'package:d9l_weather/models/model.dart';
 import 'package:d9l_weather/pages/about_page.dart';
 import 'package:d9l_weather/pages/change_language_page.dart';
 import 'package:d9l_weather/pages/chenge_theme_page.dart';
 import 'package:d9l_weather/pages/search_page.dart';
-import 'package:d9l_weather/sp_client.dart';
+import '../utils/sp_client.dart';
 import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:d9l_weather/store/themes.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     D9l().lang = Localizations.localeOf(context).languageCode;
-    SpClient.sp.setString('lang', D9l().lang);
+    SpClient().setString('lang', D9l().lang);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Themes.primaryColor2(context),
@@ -139,7 +139,7 @@ class HomePage extends StatelessWidget {
                         children: <Widget>[
                           Text(homePageStore.lsType[element.type], style: TextStyle(color: Colors.white)),
                           SizedBox(height: 3.0),
-                          Text(element.brf, style: TextStyle(color: Colors.white)),
+                          Text(element.brf!, style: TextStyle(color: Colors.white)),
                         ],
                       ),
                     );
@@ -163,7 +163,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _centerWidget({String icon, String title, String data}) {
+  Widget _centerWidget({required String icon, required String title, required String data}) {
     return Expanded(
       child: Column(
         children: <Widget>[
@@ -178,7 +178,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _threeDayWeather(DailyForecast dailyForecast) {
-    String date = DateFormat('EE', D9l().lang).format(DateTime.parse(dailyForecast.date));
+    String date = DateFormat('EE', D9l().lang).format(DateTime.parse(dailyForecast.date!));
     return Expanded(
       child: Column(
         children: <Widget>[
@@ -187,10 +187,10 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 4.0),
             child: Image.asset('assets/images/weather/${dailyForecast.condCodeD}.png', color: Colors.white),
           ),
-          Text(dailyForecast.condTxtD, style: TextStyle(color: Colors.white)),
+          Text(dailyForecast.condTxtD!, style: TextStyle(color: Colors.white)),
           Padding(
             padding: EdgeInsets.only(top: 4.0),
-            child: Text(dailyForecast.tmpMin + '℃~' + dailyForecast.tmpMax + '℃', style: TextStyle(color: Colors.white)),
+            child: Text(dailyForecast.tmpMin! + '℃~' + dailyForecast.tmpMax! + '℃', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

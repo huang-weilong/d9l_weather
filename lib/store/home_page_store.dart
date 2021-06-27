@@ -1,10 +1,10 @@
-import 'package:d9l_weather/d9l.dart';
+import '../utils/d9l.dart';
 import 'package:d9l_weather/utils/http.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:d9l_weather/models/model.dart';
-import '../sp_client.dart';
+import '../utils/sp_client.dart';
 
 part 'home_page_store.g.dart';
 
@@ -18,19 +18,19 @@ final HomePageStore homePageStore = HomePageStore();
 
 abstract class HomePageBase with Store {
   @observable
-  Basic basic;
+  Basic? basic;
   @observable
-  Update update;
+  Update? update;
   @observable
-  Now now;
-  String status;
-  String cid;
+  Now? now;
+  String? status;
+  String? cid;
   @observable
   ObservableList<DailyForecast> dailyForecastList = ObservableList<DailyForecast>();
   @observable
   ObservableList<LifeStyle> lifeStyleList = ObservableList<LifeStyle>();
   @observable
-  AirQuality airQuality;
+  AirQuality? airQuality;
   Map lsType = {
     'comf': '舒适度',
     'cw': '洗车',
@@ -52,21 +52,21 @@ abstract class HomePageBase with Store {
     await _getLifeStyle();
 
     if (status != null) {
-      if (status.contains('permission')) {
-        this.cid = SpClient.sp.getString('cid');
+      if (status!.contains('permission')) {
+        this.cid = SpClient().getString('cid')!;
         Fluttertoast.showToast(msg: D9l.toastStr[D9l().lang]['permission']);
         return false;
-      } else if (status.contains('unknown')) {
-        this.cid = SpClient.sp.getString('cid');
+      } else if (status!.contains('unknown')) {
+        this.cid = SpClient().getString('cid')!;
         Fluttertoast.showToast(msg: D9l.toastStr[D9l().lang]['unknown']);
         return false;
-      } else if (status.contains('no more')) {
-        this.cid = SpClient.sp.getString('cid');
+      } else if (status!.contains('no more')) {
+        this.cid = SpClient().getString('cid')!;
         Fluttertoast.showToast(msg: D9l.toastStr[D9l().lang]['no_more_requests']);
         _setEmptyData();
         return false;
       }
-      SpClient.sp.setString('cid', cid);
+      SpClient().setString('cid', cid!);
       return true;
     } else {
       _setEmptyData();

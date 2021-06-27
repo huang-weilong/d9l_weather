@@ -1,5 +1,5 @@
-import 'package:d9l_weather/d9l.dart';
-import 'package:d9l_weather/sp_client.dart';
+import '../utils/d9l.dart';
+import '../utils/sp_client.dart';
 import 'package:d9l_weather/store/home_page_store.dart';
 import 'package:d9l_weather/store/themes.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -30,7 +30,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                 title: Text('Chinese'.tr()),
                 trailing: D9l().lang == 'zh' ? Icon(Icons.check, color: Themes.primaryColor1(context)) : null,
                 onTap: () async {
-                  await SpClient.sp.setString('lang', 'zh');
+                  await SpClient().setString('lang', 'zh');
                   await context.setLocale(Locale("zh", "CN"));
                   D9l().lang = 'zh';
                   await Future.delayed(Duration(milliseconds: 10));
@@ -46,7 +46,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                 title: Text('English'.tr()),
                 trailing: D9l().lang == 'en' ? Icon(Icons.check, color: Themes.primaryColor1(context)) : null,
                 onTap: () async {
-                  await SpClient.sp.setString('lang', 'en');
+                  await SpClient().setString('lang', 'en');
                   await context.setLocale(Locale("en", "US"));
                   D9l().lang = 'en';
                   await Future.delayed(Duration(milliseconds: 10));

@@ -1,5 +1,4 @@
-import 'package:d9l_weather/main.dart';
-import 'package:d9l_weather/sp_client.dart';
+import '../utils/sp_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,13 +18,13 @@ class Themes with ChangeNotifier {
     'color5': Color(0xff5b5b5b),
   };
 
-  Color _primaryColor1 = colorMap1[SpClient.sp.getString('theme') ?? 'color1'];
-  Color _primaryColor2 = colorMap2[SpClient.sp.getString('theme') ?? 'color1'];
+  Color _primaryColor1 = colorMap1[SpClient().getString('theme') ?? 'color1']!;
+  Color _primaryColor2 = colorMap2[SpClient().getString('theme') ?? 'color1']!;
 
   void changeTheme(String theme) {
-    SpClient.sp.setString('theme', theme);
-    _primaryColor1 = colorMap1[SpClient.sp.getString('theme')];
-    _primaryColor2 = colorMap2[SpClient.sp.getString('theme')];
+    SpClient().setString('theme', theme);
+    _primaryColor1 = colorMap1[SpClient().getString('theme')]!;
+    _primaryColor2 = colorMap2[SpClient().getString('theme')]!;
     notifyListeners();
   }
 

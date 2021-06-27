@@ -1,4 +1,4 @@
-import 'package:d9l_weather/sp_client.dart';
+import '../utils/sp_client.dart';
 import 'package:d9l_weather/store/themes.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
                   color: Themes.colorMap1[e],
                   height: 50.0,
                   width: 50.0,
-                  child: Icon(Icons.check, color: (SpClient.sp.getString('theme') ?? 'color1') == e ? Colors.white : Themes.colorMap1[e]),
+                  child: Icon(Icons.check, color: (SpClient().getString('theme') ?? 'color1') == e ? Colors.white : Themes.colorMap1[e]),
                 ),
               );
             }).toList(),

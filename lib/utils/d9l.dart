@@ -1,16 +1,6 @@
 class D9l {
-  factory D9l() => _getInstance();
-
-  static D9l get instance => _getInstance();
-  static D9l _instance; // 单例对象
-
-  static D9l _getInstance() {
-    if (_instance == null) {
-      _instance = D9l._internal();
-    }
-    return _instance;
-  }
-
+  static final D9l _singleton = D9l._internal();
+  factory D9l() => _singleton;
   D9l._internal();
 
   //////////////////////////////////////////////////////

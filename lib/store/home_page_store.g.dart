@@ -12,13 +12,13 @@ mixin _$HomePageStore on HomePageBase, Store {
   final _$basicAtom = Atom(name: 'HomePageBase.basic');
 
   @override
-  Basic get basic {
+  Basic? get basic {
     _$basicAtom.reportRead();
     return super.basic;
   }
 
   @override
-  set basic(Basic value) {
+  set basic(Basic? value) {
     _$basicAtom.reportWrite(value, super.basic, () {
       super.basic = value;
     });
@@ -27,13 +27,13 @@ mixin _$HomePageStore on HomePageBase, Store {
   final _$updateAtom = Atom(name: 'HomePageBase.update');
 
   @override
-  Update get update {
+  Update? get update {
     _$updateAtom.reportRead();
     return super.update;
   }
 
   @override
-  set update(Update value) {
+  set update(Update? value) {
     _$updateAtom.reportWrite(value, super.update, () {
       super.update = value;
     });
@@ -42,13 +42,13 @@ mixin _$HomePageStore on HomePageBase, Store {
   final _$nowAtom = Atom(name: 'HomePageBase.now');
 
   @override
-  Now get now {
+  Now? get now {
     _$nowAtom.reportRead();
     return super.now;
   }
 
   @override
-  set now(Now value) {
+  set now(Now? value) {
     _$nowAtom.reportWrite(value, super.now, () {
       super.now = value;
     });
@@ -87,13 +87,13 @@ mixin _$HomePageStore on HomePageBase, Store {
   final _$airQualityAtom = Atom(name: 'HomePageBase.airQuality');
 
   @override
-  AirQuality get airQuality {
+  AirQuality? get airQuality {
     _$airQualityAtom.reportRead();
     return super.airQuality;
   }
 
   @override
-  set airQuality(AirQuality value) {
+  set airQuality(AirQuality? value) {
     _$airQualityAtom.reportWrite(value, super.airQuality, () {
       super.airQuality = value;
     });
