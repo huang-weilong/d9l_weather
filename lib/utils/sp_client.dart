@@ -19,4 +19,12 @@ class SpClient {
   static Future<bool?>? setString(String key, String value) async {
     return _sp.setString(key, value);
   }
+
+  static int? getInt(String key) {
+    return _sp.getInt(key);
+  }
+
+  static Future<bool?>? setInt(String key, int value) async {
+    return _sp.setInt(key, value);
+  }
 }

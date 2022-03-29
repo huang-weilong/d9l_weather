@@ -22,15 +22,26 @@ void main() async {
     HomeController h = Get.find();
     h.cid = SpClient.getString('cid');
     D9l().lang = SpClient.getString('lang') ?? 'zh';
+
+    // 初始化语言
+    Locale locale;
+    if (D9l().lang == 'zh')
+      locale = Locale('zh', 'CN');
+    else
+      locale = Locale('en', 'US');
     await h.getWeather();
 
+    // 初始化主题
     ThemesController t = Get.find();
+    int themesIndex = SpClient.getInt('themeIndex') ?? 0;
+    t.setCurrentTheme(themesIndex);
 
     runApp(GetMaterialApp(
       translations: Language(),
-      locale: const Locale('zh', 'CN'),
+      locale: locale,
+      fallbackLocale: const Locale('zh', 'CN'),
       home: HomePage(),
-      theme: ThemeData.from(colorScheme: ColorScheme.light(primary: t.themesColor.first)),
+      theme: ThemeData.from(colorScheme: ColorScheme.light(primary: t.themesColor[themesIndex])),
     ));
   });
 }

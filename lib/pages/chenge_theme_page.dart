@@ -1,4 +1,5 @@
 import 'package:d9l_weather/store/themes.dart';
+import 'package:d9l_weather/utils/sp_client.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,6 +42,7 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
                     onTap: () {
                       Get.changeTheme(ThemeData.from(colorScheme: ColorScheme.light(primary: e)));
                       controller.setCurrentTheme(controller.themesColor.indexOf(e));
+                      SpClient.setInt('themeIndex', controller.currentTheme.value);
                     },
                   ),
                 )

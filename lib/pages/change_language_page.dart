@@ -31,7 +31,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                 onTap: () async {
                   var locale = const Locale('zh', 'CN');
                   Get.updateLocale(locale);
-                  await SpClient.setString('lang', 'zh');
+                  SpClient.setString('lang', 'zh');
                   D9l().lang = 'zh';
                   await Future.delayed(Duration(milliseconds: 10));
                   HomeController homeController = Get.find();
@@ -49,7 +49,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                 onTap: () async {
                   var locale = const Locale('en', 'US');
                   Get.updateLocale(locale);
-                  await SpClient.setString('lang', 'en');
+                  SpClient.setString('lang', 'en');
                   D9l().lang = 'en';
                   await Future.delayed(Duration(milliseconds: 10));
                   HomeController homeController = Get.find();

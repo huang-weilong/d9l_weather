@@ -23,7 +23,6 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Themes.primaryColor2(context),
         elevation: 0.0,
         title: Obx(
           () => Text(
