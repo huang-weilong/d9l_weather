@@ -1,8 +1,6 @@
-import '../utils/sp_client.dart';
 import 'package:d9l_weather/store/themes.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class ChangeThemePage extends StatefulWidget {
   @override
@@ -12,36 +10,41 @@ class ChangeThemePage extends StatefulWidget {
 class _ChangeThemePageState extends State<ChangeThemePage> {
   @override
   Widget build(BuildContext context) {
+    ThemesController controller = Get.find();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('change_theme'.tr()),
+        title: Text('change_theme'.tr),
         elevation: 0.0,
-        backgroundColor: Themes.primaryColor1(context),
       ),
       body: Center(
         child: Column(children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'change_theme'.tr(),
-              style: TextStyle(color: Themes.primaryColor1(context), fontSize: 16.0),
-            ),
+            child: Text('change_theme'.tr),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: Themes.colorMap1.keys.map((e) {
-              return GestureDetector(
-                onTap: () {
-                  Provider.of<Themes>(context, listen: false).changeTheme(e);
-                },
-                child: Container(
-                  color: Themes.colorMap1[e],
-                  height: 50.0,
-                  width: 50.0,
-                  child: Icon(Icons.check, color: (SpClient().getString('theme') ?? 'color1') == e ? Colors.white : Themes.colorMap1[e]),
-                ),
-              );
-            }).toList(),
+            children: controller.themesColor
+                .map(
+                  (e) => GestureDetector(
+                    child: Obx(
+                      () => Container(
+                        height: 50.0,
+                        width: 50.0,
+                        color: e,
+                        child: controller.currentTheme.value == controller.themesColor.indexOf(e)
+                            ? const Icon(Icons.check, color: Colors.white)
+                            : null,
+                      ),
+                    ),
+                    onTap: () {
+                      Get.changeTheme(ThemeData.from(colorScheme: ColorScheme.light(primary: e)));
+                      controller.setCurrentTheme(controller.themesColor.indexOf(e));
+                    },
+                  ),
+                )
+                .toList(),
           ),
         ]),
       ),

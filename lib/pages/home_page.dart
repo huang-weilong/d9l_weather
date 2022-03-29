@@ -1,3 +1,7 @@
+import 'package:d9l_weather/store/home_store.dart';
+import 'package:d9l_weather/store/themes.dart';
+import 'package:get/get.dart';
+
 import '../utils/d9l.dart';
 import 'package:d9l_weather/models/model.dart';
 import 'package:d9l_weather/pages/about_page.dart';
@@ -5,27 +9,25 @@ import 'package:d9l_weather/pages/change_language_page.dart';
 import 'package:d9l_weather/pages/chenge_theme_page.dart';
 import 'package:d9l_weather/pages/search_page.dart';
 import '../utils/sp_client.dart';
-import 'package:d9l_weather/store/home_page_store.dart';
-import 'package:d9l_weather/store/themes.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    D9l().lang = Localizations.localeOf(context).languageCode;
-    SpClient().setString('lang', D9l().lang);
+    SpClient.setString('lang', D9l().lang);
+    HomeController homeController = Get.find();
+    ThemesController themesController = Get.find();
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Themes.primaryColor2(context),
+        // backgroundColor: Themes.primaryColor2(context),
         elevation: 0.0,
-        title: Observer(
-          builder: (_) => Text(
-            '${homePageStore.basic?.location}',
+        title: Obx(
+          () => Text(
+            '${homeController.basic.value.location}',
             style: TextStyle(fontSize: 32.0, color: Colors.white),
           ),
         ),
@@ -38,97 +40,93 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: [Themes.primaryColor1(context), Themes.primaryColor2(context)],
-          ),
-        ),
-        child: RefreshIndicator(
-          onRefresh: _pullDownRefresh,
-          child: ListView(
-            children: <Widget>[
-              SizedBox(height: 20.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Observer(builder: (_) => Text('${homePageStore.now?.tmp}', style: TextStyle(fontSize: 140.0, color: Colors.white))),
-                  Text('℃', style: TextStyle(fontSize: 70.0, color: Colors.white)),
-                ],
-              ),
-              Observer(
-                builder: (_) => Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+      body: Obx(
+        () => Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.0),
+          color: themesController.themesColor[themesController.currentTheme.value],
+          // decoration: BoxDecoration(
+          //   gradient: LinearGradient(
+          //     begin: Alignment.bottomCenter,
+          //     end: Alignment.topCenter,
+          //     colors: [Colors.blueAccent, Colors.blue],
+          //   ),
+          // ),
+          child: RefreshIndicator(
+            onRefresh: _pullDownRefresh,
+            child: ListView(
+              children: <Widget>[
+                SizedBox(height: 20.0),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('${homePageStore.now?.condTxt}', style: TextStyle(fontSize: 32.0, color: Colors.white)),
-                    Text('  |  ', style: TextStyle(color: Colors.white)),
-                    Text(
-                      '${'air'.tr()}  ${homePageStore.airQuality?.qlty}·${homePageStore.airQuality?.aqi}',
-                      style: TextStyle(fontSize: 22.0, color: Colors.white),
-                    )
+                    Text('${homeController.now.value.tmp}', style: TextStyle(fontSize: 140.0, color: Colors.white)),
+                    Text('℃', style: TextStyle(fontSize: 70.0, color: Colors.white)),
                   ],
                 ),
-              ),
-              SizedBox(height: 30.0),
-              Observer(
-                builder: (_) => Row(
-                  children: homePageStore.dailyForecastList.map((item) => _threeDayWeather(item)).toList(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text('${homeController.now.value.condTxt}', style: TextStyle(fontSize: 32.0, color: Colors.white)),
+                    Text('  |  ', style: TextStyle(color: Colors.white)),
+                    Text(
+                      '${'air'.tr}  ${homeController.airQuality.value.qlty}·${homeController.airQuality.value.aqi}',
+                      style: TextStyle(fontSize: 22.0, color: Colors.white),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 20.0),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                decoration: BoxDecoration(
-                  color: Color(0x33ffffff),
-                  borderRadius: BorderRadius.circular(8.0),
+                SizedBox(height: 30.0),
+                Row(
+                  children: homeController.dailyForecastList.value.map((item) => _threeDayWeather(item)).toList(),
                 ),
-                child: Observer(
-                  builder: (_) => Row(
+                SizedBox(height: 20.0),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  decoration: BoxDecoration(
+                    color: Color(0x33ffffff),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
                     children: <Widget>[
                       _centerWidget(
                         icon: 'assets/images/wind_direction.png',
-                        title: 'wind'.tr(),
-                        data: '${homePageStore.now?.windDir}',
+                        title: 'wind'.tr,
+                        data: '${homeController.now.value.windDir}',
                       ),
                       _centerWidget(
                         icon: 'assets/images/humidity.png',
-                        title: 'humidity'.tr(),
-                        data: '${homePageStore.now?.hum}%',
+                        title: 'humidity'.tr,
+                        data: '${homeController.now.value.hum}%',
                       ),
                       _centerWidget(
                         icon: 'assets/images/air_pressure.png',
-                        title: 'pressure'.tr(),
-                        data: '${homePageStore.now?.pres}hpa',
+                        title: 'pressure'.tr,
+                        data: '${homeController.now.value.pres}hpa',
                       ),
                       _centerWidget(
                         icon: 'assets/images/somatosensory.png',
-                        title: 'apparent'.tr(),
-                        data: '${homePageStore.now?.fl}℃',
+                        title: 'apparent'.tr,
+                        data: '${homeController.now.value.fl}℃',
                       ),
                     ],
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20.0),
-                padding: const EdgeInsets.only(bottom: 2.0),
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.white)),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 20.0),
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.white)),
+                  ),
+                  child: Text('lifestyle'.tr, style: TextStyle(fontSize: 16.0, color: Colors.white)),
                 ),
-                child: Text('lifestyle'.tr(), style: TextStyle(fontSize: 16.0, color: Colors.white)),
-              ),
-              Observer(
-                builder: (_) => GridView.count(
+                GridView.count(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   crossAxisCount: 4,
                   childAspectRatio: 1.6,
                   crossAxisSpacing: 4.0,
                   mainAxisSpacing: 4.0,
-                  children: homePageStore.lifeStyleList.where((element) => homePageStore.lsType[element.type] != null).map((element) {
+                  children:
+                      homeController.lifeStyleList.value.where((element) => homeController.lsType[element.type] != null).map((element) {
                     return Container(
                       decoration: BoxDecoration(
                         color: Color(0x33ffffff),
@@ -137,7 +135,7 @@ class HomePage extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(homePageStore.lsType[element.type], style: TextStyle(color: Colors.white)),
+                          Text(homeController.lsType[element.type], style: TextStyle(color: Colors.white)),
                           SizedBox(height: 3.0),
                           Text(element.brf!, style: TextStyle(color: Colors.white)),
                         ],
@@ -145,18 +143,18 @@ class HomePage extends StatelessWidget {
                     );
                   }).toList(),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('data_sources'.tr(), style: TextStyle(color: Color(0xaac3c3c3))),
-                    Text('d9l_weather', style: TextStyle(color: Color(0xaac3c3c3))),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('data_sources'.tr, style: TextStyle(color: Color(0xaac3c3c3))),
+                      Text('d9l_weather', style: TextStyle(color: Color(0xaac3c3c3))),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -205,19 +203,20 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              title: Text('change_city'.tr()),
+              title: Text('change_city'.tr),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => SearchPage())).then((result) {
                   if (result == true) {
-                    homePageStore.getWeather();
+                    HomeController homeController = Get.find();
+                    homeController.getWeather();
                   }
                 });
               },
             ),
             Divider(height: 0.0),
             ListTile(
-              title: Text('change_language'.tr()),
+              title: Text('change_language'.tr),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => ChangeLanguagePage()));
@@ -225,7 +224,7 @@ class HomePage extends StatelessWidget {
             ),
             Divider(height: 0.0),
             ListTile(
-              title: Text('change_theme'.tr()),
+              title: Text('change_theme'.tr),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => ChangeThemePage()));
@@ -233,7 +232,7 @@ class HomePage extends StatelessWidget {
             ),
             Divider(height: 0.0),
             ListTile(
-              title: Text('about'.tr()),
+              title: Text('about'.tr),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, CupertinoPageRoute(builder: (_) => AboutPage()));
@@ -246,7 +245,8 @@ class HomePage extends StatelessWidget {
   }
 
   Future<void> _pullDownRefresh() async {
-    bool result = await homePageStore.getWeather();
+    HomeController homeController = Get.find();
+    bool result = await homeController.getWeather();
     if (result) Fluttertoast.showToast(msg: D9l.toastStr[D9l().lang]['update']);
   }
 }

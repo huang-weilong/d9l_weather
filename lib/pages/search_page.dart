@@ -1,9 +1,8 @@
-import 'package:d9l_weather/store/home_page_store.dart';
-import 'package:d9l_weather/store/search_page_store.dart';
+import 'package:d9l_weather/store/home_store.dart';
+import 'package:d9l_weather/store/search_store.dart';
 import 'package:d9l_weather/store/themes.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -13,57 +12,63 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
-    searchPageStore.cityList.clear();
+    SearchController searchController = Get.find();
+    searchController.cityList.value.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    SearchController searchController = Get.find();
+    ThemesController themesController = Get.find();
     double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
       appBar: PreferredSize(
-        child: Container(
-          color: Themes.primaryColor1(context),
-          padding: EdgeInsets.only(top: statusBarHeight, left: 10.0, right: 10.0),
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Image.asset('assets/images/search.png', width: 20.0, color: Colors.white),
-              ),
-              Flexible(
-                child: TextField(
-                  scrollPadding: EdgeInsets.all(0.0),
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(0.0),
-                    isDense: true,
-                    hintText: 'city_name'.tr(),
-                    hintStyle: TextStyle(color: Colors.white),
-                  ),
-                  onChanged: (v) {
-                    if (v != '') searchPageStore.getCityList(v);
-                  },
+        child: Obx(
+          () => Container(
+            color: themesController.themesColor[themesController.currentTheme.value],
+            padding: EdgeInsets.only(top: statusBarHeight, left: 10.0, right: 10.0),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Image.asset('assets/images/search.png', width: 20.0, color: Colors.white),
                 ),
-              ),
-              IconButton(
-                icon: Text('cancel'.tr(), style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
+                Flexible(
+                  child: TextField(
+                    scrollPadding: EdgeInsets.all(0.0),
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(0.0),
+                      isDense: true,
+                      hintText: 'city_name'.tr,
+                      hintStyle: TextStyle(color: Colors.white),
+                    ),
+                    onChanged: (v) {
+                      if (v != '') searchController.getCityList(v);
+                    },
+                  ),
+                ),
+                IconButton(
+                  icon: Text('cancel'.tr, style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
           ),
         ),
         preferredSize: Size.fromHeight(56.0),
       ),
-      body: Observer(
-        builder: (_) => ListView(
-          children: searchPageStore.cityList.map((item) {
+      body: Obx(
+        () => ListView(
+          children: searchController.cityList.value.map((item) {
             return InkWell(
               onTap: () {
-                homePageStore.cid = item.cid!;
+                HomeController homeController = Get.find();
+                homeController.cid = item.cid!;
                 Navigator.pop(context, true);
               },
               child: Container(

@@ -1,16 +1,14 @@
-import 'package:d9l_weather/store/themes.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('about').tr(),
+        title: Text('about'.tr),
         centerTitle: true,
         elevation: 0.0,
-        backgroundColor: Themes.primaryColor1(context),
       ),
       body: Center(
         child: Padding(
@@ -19,7 +17,7 @@ class AboutPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                'description'.tr(),
+                'description'.tr,
                 style: TextStyle(fontSize: 20.0),
               ),
               SizedBox(height: 30.0),
@@ -29,7 +27,7 @@ class AboutPage extends StatelessWidget {
                 textScaleFactor: 0.9,
                 text: TextSpan(
                   style: TextStyle(color: Color(0xff333333)),
-                  text: 'jianshu'.tr(),
+                  text: 'jianshu'.tr,
                   children: [TextSpan(text: ': https://www.jianshu.com/p/e8e535952291')],
                 ),
               ),

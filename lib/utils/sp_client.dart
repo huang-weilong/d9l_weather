@@ -1,23 +1,22 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SpClient {
-  static final SpClient _spClient = SpClient._internal();
-  factory SpClient() => _spClient;
-  SpClient._internal() {
-    _init();
-  }
+  static final SpClient _instance = SpClient._internal();
+  factory SpClient() => _instance;
+  SpClient._internal();
 
-  late SharedPreferences _sp;
+  static late SharedPreferences _sp;
 
-  Future _init() async {
+  static Future<SpClient> getInstance() async {
     _sp = await SharedPreferences.getInstance();
+    return _instance;
   }
 
-  String? getString(String key) {
+  static String? getString(String key) {
     return _sp.getString(key);
   }
 
-  Future<bool?>? setString(String key, String value) async {
+  static Future<bool?>? setString(String key, String value) async {
     return _sp.setString(key, value);
   }
 }
