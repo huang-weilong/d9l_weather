@@ -29,10 +29,7 @@ class HomeController extends GetxController {
   Future<bool> getWeather() async {
 //    status = null;
 
-    await _getNow();
-    await _getForecast();
-    await _getAirQuality();
-    await _getLifeStyle();
+    await Future.wait([_getNow(), _getForecast(), _getAirQuality(), _getLifeStyle()]);
 
     if (status != null) {
       if (status!.contains('permission')) {

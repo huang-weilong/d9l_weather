@@ -33,10 +33,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                   Get.updateLocale(locale);
                   SpClient.setString('lang', 'zh');
                   D9l().lang = 'zh';
-                  await Future.delayed(Duration(milliseconds: 10));
-                  HomeController homeController = Get.find();
-                  homeController.getWeather();
-                  setState(() {});
+                  updateHomeData();
                 },
               ),
             ),
@@ -51,10 +48,7 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                   Get.updateLocale(locale);
                   SpClient.setString('lang', 'en');
                   D9l().lang = 'en';
-                  await Future.delayed(Duration(milliseconds: 10));
-                  HomeController homeController = Get.find();
-                  homeController.getWeather();
-                  setState(() {});
+                  updateHomeData();
                 },
               ),
             ),
@@ -62,5 +56,10 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
         ),
       ),
     );
+  }
+
+  void updateHomeData() {
+    HomeController homeController = Get.find();
+    homeController.getWeather();
   }
 }

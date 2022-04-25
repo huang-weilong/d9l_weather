@@ -10,18 +10,19 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  SearchController searchController = Get.find();
+  ThemesController themesController = Get.find();
+
   @override
   void dispose() {
-    SearchController searchController = Get.find();
     searchController.cityList.value.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    SearchController searchController = Get.find();
-    ThemesController themesController = Get.find();
     double statusBarHeight = MediaQuery.of(context).padding.top;
+
     return Scaffold(
       appBar: PreferredSize(
         child: Obx(
